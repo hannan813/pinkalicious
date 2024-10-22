@@ -13,6 +13,7 @@ public class Player extends Entity {
         this.gp = gp;
         this.keyH = keyH;
         setDefaultValues();
+
     }
     public void setDefaultValues(){
         x = 100;
