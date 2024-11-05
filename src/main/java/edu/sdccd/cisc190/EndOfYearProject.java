@@ -77,12 +77,12 @@ public class EndOfYearProject extends JPanel implements KeyListener,Runnable
         t=new Thread(this);
         t.start();
     }
-    public void paintComponent(Graphics g)//just draws everything. it is drawn in order of the code. draw background first
+    public void paintComponent(Graphics g)
     {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
         //fill background
-        Color customColor = new Color(175, 169, 236);
+        Color customColor = new Color(135, 206, 254);
         g2d.setPaint(customColor);
         g2d.fillRect(0,0,800,500);
         g2d.setPaint(Color.black);
@@ -109,7 +109,7 @@ public class EndOfYearProject extends JPanel implements KeyListener,Runnable
             g2d.fillRect(m+520, n, 120, 280);
 
             //grid
-            customColor = new Color(222, 219, 250);
+            customColor = new Color(196, 164, 132);
             g2d.setColor(customColor);
             g2d.fillRect(232, 355, 40, 40);
             g2d.fillRect(232, 275, 40, 40);
@@ -143,11 +143,11 @@ public class EndOfYearProject extends JPanel implements KeyListener,Runnable
             g2d.fillRect(552, 115, 40, 40);
 
             //where mario goes
-            g2d.setColor(Color.RED);
+            g2d.setColor(Color.blue);
             g2d.fillRect(x,y,20,20);
 
             //where goombas goes
-            g2d.setColor(Color.BLUE);
+            g2d.setColor(Color.black);
             g2d.fillOval(a1,b,20,20);
             g2d.fillOval(a2,b+36,20,20);
             g2d.fillOval(a1,b+72,20,20);

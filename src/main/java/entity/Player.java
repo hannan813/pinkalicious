@@ -6,7 +6,7 @@ import edu.sdccd.cisc190.KeyHandler;
 
 import java.awt.*;
 
-public class Player extends Entity {
+public class Player extends entity.Entity {
     GamePanel gp;
     KeyHandler keyH;
     public Player(GamePanel gp, KeyHandler keyH) {
