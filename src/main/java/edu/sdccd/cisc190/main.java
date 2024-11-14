@@ -1,23 +1,40 @@
 package edu.sdccd.cisc190;
 
-import javax.swing.JFrame;
+import javafx.application.Application;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javax.swing.SwingUtilities;
 
-public class main {
-    public static void main(String[] args) {
-        JFrame window = new JFrame();
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
-        window.setTitle("Worlds hardest game: mario themed");
+public class main extends Application {
 
+    @Override
+    public void start(Stage primaryStage) {
+        // Create a JFXPanel to embed Swing components in JavaFX
+        JFXPanel jfxPanel = new JFXPanel();
+
+        // Create an instance of your GamePanel (Swing component)
         GamePanel gamePanel = new GamePanel();
-        window.add(gamePanel);
 
-        window.pack();
+        // Embed the Swing component into the JFXPanel
+        SwingUtilities.invokeLater(() -> {
+            jfxPanel.setScene(new Scene(gamePanel));
+        });
 
-        window.setLocationRelativeTo(null);
-        window.setVisible(true);
+        // Set up JavaFX Scene and Stage
+        StackPane root = new StackPane();
+        root.getChildren().add(jfxPanel);  // Add JFXPanel (which contains GamePanel) to the layout
 
-        gamePanel.startGameThread();
+        Scene scene = new Scene(root, 800, 500);
+        primaryStage.setTitle("End Of Year Project");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        gamePanel.requestFocus(); // Focus to accept key inputs
+    }
+
+    public main(String[] args) {
+        launch(args);
     }
 }
-
