@@ -6,40 +6,39 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-    public class MainMenu {
+public class MainMenu {
 
-        public Scene createMainMenuScene(Stage stage) {
-            Pane mainMenuPane = new Pane();
-            Text title = new Text(300, 100, "End of Year Project");
-            title.setStyle("-fx-font-size: 30px;");
+    public Scene createMainMenuScene(Stage stage) {
+        Pane mainMenuPane = new Pane();
+        Text title = new Text(300, 100, "End of Year Project");
+        title.setStyle("-fx-font-size: 30px;");
 
-            Button startButton = new Button("Start Game");
-            startButton.setLayoutX(350);
-            startButton.setLayoutY(200);
-            startButton.setOnAction(e -> startGame(stage));
+        Button startButton = new Button("Start Game");
+        startButton.setLayoutX(350);
+        startButton.setLayoutY(200);
+        startButton.setOnAction(e -> startGame(stage));
 
-            Button leaderboardButton = new Button("Leaderboard");
-            leaderboardButton.setLayoutX(350);
-            leaderboardButton.setLayoutY(250);
-            leaderboardButton.setOnAction(e -> showLeaderboard(stage));
+        Button leaderboardButton = new Button("Leaderboard");
+        leaderboardButton.setLayoutX(350);
+        leaderboardButton.setLayoutY(250);
+        leaderboardButton.setOnAction(e -> showLeaderboard(stage));
 
-            mainMenuPane.getChildren().addAll(title, startButton, leaderboardButton);
+        mainMenuPane.getChildren().addAll(title, startButton, leaderboardButton);
 
-            return new Scene(mainMenuPane, 800, 500);
-        }
-
-        private <Game> void startGame(Stage stage) {
-            Game game = new Game();
-            Scene gameScene = game.getClass();
-            stage.setScene(gameScene);
-        }
-
-        private void showLeaderboard(Stage stage) {
-            Leaderboard leaderboard = new Leaderboard();
-            Scene leaderboardScene = leaderboard.createLeaderboardScene();
-            stage.setScene(leaderboardScene);
-        }
+        return new Scene(mainMenuPane, 800, 500);
     }
 
+    private void startGame(Stage stage) {
+        Game game = new Game();
+        // Pass the stage to the Game class's createGameScene method
+        Scene gameScene = game.createGameScene(stage);
+        stage.setScene(gameScene);
+    }
 
+    private void showLeaderboard(Stage stage) {
+        Leaderboard leaderboard = new Leaderboard();
+        Scene leaderboardScene = leaderboard.createLeaderboardScene();
+        stage.setScene(leaderboardScene);
+    }
+}
 
