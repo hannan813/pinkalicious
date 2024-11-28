@@ -4,12 +4,12 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MainTest {
 
     @Test
     void getAppName() throws IOException {
-        assertEquals("CISC190 Final Project", Main.getAppName());
+        assertEquals("CISC190 Final Project", EndOfYearProject.getAppName());
     }
 }

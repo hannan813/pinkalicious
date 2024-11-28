@@ -1,44 +1,41 @@
 package edu.sdccd.cisc190;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
+import javafx.scene.input.KeyCode;
 
 public class MainMenu {
+    private Scene scene;
 
-    public Scene createMainMenuScene(Stage stage) {
+    public MainMenu(EndOfYearProject endOfYearProject) {
         Pane mainMenuPane = new Pane();
-        Text title = new Text(300, 100, "End of Year Project");
-        title.setStyle("-fx-font-size: 30px;");
+        Text titleText = new Text(150, 100, "The World's Hardest Game");
+        titleText.setFont(new Font(40));
 
-        Button startButton = new Button("Start Game");
-        startButton.setLayoutX(350);
-        startButton.setLayoutY(200);
-        startButton.setOnAction(e -> startGame(stage));
+        Text startText = new Text(250, 200, "Press SPACE to Start");
+        startText.setFont(new Font(30));
 
-        Button leaderboardButton = new Button("Leaderboard");
-        leaderboardButton.setLayoutX(350);
-        leaderboardButton.setLayoutY(250);
-        leaderboardButton.setOnAction(e -> showLeaderboard(stage));
+        Text quitText = new Text(250, 300, "Press Q to Quit");
+        quitText.setFont(new Font(30));
 
-        mainMenuPane.getChildren().addAll(title, startButton, leaderboardButton);
+        mainMenuPane.getChildren().addAll(titleText, startText, quitText);
 
-        return new Scene(mainMenuPane, 800, 500);
+        scene = new Scene(mainMenuPane, 800, 500);
+
+        // Handle key presses to navigate the menu
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.SPACE) {
+                // Start the game by switching to the game scene from EndOfYearProject
+                endOfYearProject.switchToGame();  // Use EndOfYearProject's method to switch to the game scene
+            } else if (event.getCode() == KeyCode.Q) {
+                System.exit(0); // Quit the game
+            }
+        });
     }
 
-    private void startGame(Stage stage) {
-        Game game = new Game();
-        // Pass the stage to the Game class's createGameScene method
-        Scene gameScene = game.createGameScene(stage);
-        stage.setScene(gameScene);
-    }
-
-    private void showLeaderboard(Stage stage) {
-        Leaderboard leaderboard = new Leaderboard();
-        Scene leaderboardScene = leaderboard.createLeaderboardScene();
-        stage.setScene(leaderboardScene);
+    public Scene getScene() {
+        return scene;
     }
 }
-
