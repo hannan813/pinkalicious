@@ -7,19 +7,25 @@ import javafx.scene.canvas.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+
 
 public class EndOfYearProject extends Application {
     private int x = 100, y = 350;
     private int level = 1, fails = 0, coins = 0;
     private boolean left = false, up = false, down = false, right = false;
-    private boolean repeat = true, fwrd = true;
+    private boolean repeat = true;
 
     private int m = 72, n = 115, L = 40;
     private int[] xPoints = {m, m + 3 * L, m + 3 * L, m + 4 * L, m + 4 * L, m + 11 * L, m + 11 * L, m + 16 * L, m + 16 * L, m + 13 * L, m + 13 * L, m + 12 * L, m + 12 * L, m + 5 * L, m + 5 * L, m};
     private int[] yPoints = {n, n, n + 6 * L, n + 6 * L, n + L, n + L, n, n, n + 7 * L, n + 7 * L, n + L, n + L, n + 6 * L, n + 6 * L, n + 7 * L, n + 7 * L};
     private int numPoints = 16;
-
+    // Declare Goomba variables here
+    private int[] goombaX = {m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40};
+    private int[] goombaY = {n + 1 * 40, n + 2 * 40, n + 3 * 40, n + 4 * 40, n + 5 * 40};
+    private int goombaSpeed = 4;  // How fast the Goombas move
+    private boolean fwrd = true;  // Direction control for Goombas
     private Canvas canvas;
     private AnimationTimer gameLoop;
 
@@ -37,6 +43,7 @@ public class EndOfYearProject extends Application {
         canvas = new Canvas(800, 500);
         Group root = new Group(canvas);
         Scene scene = new Scene(root);
+        initializeGoombas();
 
         // Key event handlers
         scene.setOnKeyPressed(this::keyPressed);
@@ -58,24 +65,98 @@ public class EndOfYearProject extends Application {
         primaryStage.show();
     }
 
-    private void update() {
-        if (level == 1) {
-            // Movement logic for Mario and Goombas
-            // Update Mario's position based on key presses (left, right, up, down)
-            if (left) x -= 3;
-            if (right) x += 3;
-            if (up) y -= 3;
-            if (down) y += 3;
+    private boolean isInsideGameOutline(int x, int y, int width, int height) {
+        Polygon boundary = new Polygon();
+        boundary.getPoints().addAll(
+                (double) m, (double) n,
+                (double) (m + 3 * L), (double) n,
+                (double) (m + 3 * L), (double) (n + 6 * L),
+                (double) (m + 4 * L), (double) (n + 6 * L),
+                (double) (m + 4 * L), (double) (n + L),
+                (double) (m + 11 * L), (double) (n + L),
+                (double) (m + 11 * L), (double) n,
+                (double) (m + 16 * L), (double) n,
+                (double) (m + 16 * L), (double) (n + 7 * L),
+                (double) (m + 13 * L), (double) (n + 7 * L),
+                (double) (m + 13 * L), (double) (n + L),
+                (double) (m + 12 * L), (double) (n + L),
+                (double) (m + 12 * L), (double) (n + 6 * L),
+                (double) (m + 5 * L), (double) (n + 6 * L),
+                (double) (m + 5 * L), (double) (n + 7 * L),
+                (double) m, (double) (n + 7 * L)
+        );
+        // Check all corners of Mario
+        return boundary.contains(x, y) &&                   // Top-left corner
+                boundary.contains(x + width, y) &&           // Top-right corner
+                boundary.contains(x, y + height) &&          // Bottom-left corner
+                boundary.contains(x + width, y + height);    // Bottom-right corner
+    }
+    // Adding a direction array for Goombas to control movement direction (right or left)
+    private boolean[] goombaDirection = new boolean[goombaX.length]; // true for right, false for left
 
-            // Check for collisions or level completion
-            if (x > m + 520) {
-                level++;
+    private void initializeGoombas() {
+        for (int i = 0; i < goombaX.length; i++) {
+            // Set Goombas to start in different X positions (left or right)
+            goombaX[i] = (i % 2 == 0) ? m + 120 : m + 120 + 8 * 40;
+
+            // Adjust Y so Goombas start in the correct row of the grid (e.g., one square higher)
+            goombaY[i] = m + 120 + (i * 40) - 40 + 20;  // Adjust by subtracting 40 to fix the Y offset
+
+            goombaDirection[i] = i % 2 == 0;  // Alternate directions
+        }
+    }
+    private boolean checkGoombaCollision() {
+        for (int i = 0; i < goombaX.length; i++) {
+            // Check if Mario is overlapping with any Goomba
+            if (x < goombaX[i] + 20 && x + 20 > goombaX[i] && y < goombaY[i] + 20 && y + 20 > goombaY[i]) {
+                return true; // Collision detected
             }
         }
-
-        // You can add other levels or game logic here
+        return false; // No collision
     }
 
+    private void update() {
+        int speed = 5; // Player speed
+
+        // Handle Mario's movement, keeping him inside the game outline
+        if (left && isInsideGameOutline(x - speed, y, 20, 20)) x -= speed;
+        if (right && isInsideGameOutline(x + speed, y, 20, 20)) x += speed;
+        if (up && isInsideGameOutline(x, y - speed, 20, 20)) y -= speed;
+        if (down && isInsideGameOutline(x, y + speed, 20, 20)) y += speed;
+
+        // Check if Mario collides with Goombas
+        if (checkGoombaCollision()) {
+            x = 100;  // Reset position
+            y = 350;
+            fails++;  // Increment fail count
+        }
+
+        // Move Goombas and handle boundary logic
+        moveGoombas();
+    }
+
+    private void moveGoombas() {
+        int goombaSpeed = 5;
+        for (int i = 0; i < goombaX.length; i++) {
+            if (goombaDirection[i]) {
+                goombaX[i] += goombaSpeed;  // Move right
+            } else {
+                goombaX[i] -= goombaSpeed;  // Move left
+            }
+
+            // If Goomba hits the boundary, change direction
+            int gridLeftBound = m + 120;           // Left edge of grid
+            int gridRightBound = m + 120 + 8 * 40; // Right edge of grid
+
+            if (goombaX[i] <= gridLeftBound || goombaX[i] >= gridRightBound) {
+                goombaDirection[i] = !goombaDirection[i];// Change direction
+                // Additional conditions like level completion can go here
+                if (x > m + 520) {
+                    level++;  // Move to the next level when Mario passes a certain point
+                }
+            }
+    }
+}
     private void render() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setFill(Color.LIGHTSKYBLUE);  // Background color
@@ -114,7 +195,7 @@ public class EndOfYearProject extends Application {
         // Set stroke color and width for the outline
         border.setStroke(Color.BLACK);
         border.setFill(Color.TRANSPARENT); // Transparent fill for just the outline
-        border.setStrokeWidth(2);
+        border.setStrokeWidth(1);
 
         // Add the polygon to the scene (root group)
         Group root = (Group) canvas.getParent();
@@ -153,15 +234,11 @@ public class EndOfYearProject extends Application {
         }
 
         // Draw Goombas
-        gc.setFill(Color.BLACK);
-
-// Adjusting Goomba positions to fit in the grid
-        gc.fillOval(m + 120 + 8 * 40, n + 1 * 40, 20, 20);  // Goomba 1
-        gc.fillOval(m + 120 + 8 * 40, n + 2 * 40, 20, 20);  // Goomba 2
-        gc.fillOval(m + 120 + 8 * 40, n + 3 * 40, 20, 20);  // Goomba 3
-        gc.fillOval(m + 120 + 8 * 40, n + 4 * 40, 20, 20);  // Goomba 4
-        gc.fillOval(m + 120 + 8 * 40, n + 5 * 40, 20, 20);  // Goomba 5
-
+        gc.setFill(Color.rgb(139,75,51));
+// Draw Goombas using their updated positions
+        for (int i = 0; i < goombaX.length; i++) {
+            gc.fillOval(goombaX[i], goombaY[i], 20, 20);
+        }
 
 
         if (level == 1) {
@@ -192,6 +269,3 @@ public class EndOfYearProject extends Application {
     public void switchToGame() {
     }
 }
-
-
-
