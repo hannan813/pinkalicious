@@ -1,195 +1,194 @@
 package edu.sdccd.cisc190;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.Pane;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
+import javafx.scene.shape.Polygon;
 
 public class Game {
+    private final Player player;
+    private Enemy[] enemies;  // Declare the enemies array here
+    private int x = 100, y = 350;
+    private int level = 1, fails = 0, coins = 0;
+    private boolean left = false, up = false, down = false, right = false;
+    private boolean repeat = true;
+    private int m = 72, n = 115, L = 40;
+    private int[] xPoints = {m, m + 3 * L, m + 3 * L, m + 4 * L, m + 4 * L, m + 11 * L, m + 11 * L, m + 16 * L, m + 16 * L, m + 13 * L, m + 13 * L, m + 12 * L, m + 12 * L, m + 5 * L, m + 5 * L, m};
+    private int[] yPoints = {n, n, n + 6 * L, n + 6 * L, n + L, n + L, n, n, n + 7 * L, n + 7 * L, n + L, n + L, n + 6 * L, n + 6 * L, n + 7 * L, n + 7 * L};
+    private int numPoints = 16;
+    // Declare Goomba variables here
+    private int[] goombaX = {m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40};
+    private int[] goombaY = {n + 1 * 40, n + 2 * 40, n + 3 * 40, n + 4 * 40, n + 5 * 40};
+    private int goombaSpeed = 4;  // How fast the Goombas move
+    private boolean fwrd = true;  // Direction control for Goombas
+    private Canvas canvas;
+    private AnimationTimer gameLoop;
+    private boolean isInsideGameOutline;
 
-    private Pane gamePane;
-    private Scene scene;
-    private Player player;
-    private Enemy[] enemies;
-    private Rectangle[] obstacles;
-    private Coin[] coins;
-    private Text levelText;
-    private Text scoreText;
-    private int currentLevel;
-    private int score;
-    private boolean levelComplete;
+    public Game(Canvas canvas) {
+        this.canvas = canvas;
+        this.player = new Player(100, 350, L);
+        this.enemies = new Enemy[5];
+        initializeEnemies();
+    }
 
-    public Game() {
-        gamePane = new Pane();
-        currentLevel = 1;
-        score = 0;
-        levelComplete = false;
+    public void setupInput(Scene scene) {
+        scene.setOnKeyPressed(this::keyPressed);
+        scene.setOnKeyReleased(this::keyReleased);
+    }
 
-        player = new Player(100, 100);
-        enemies = new Enemy[5];  // Adjust number of enemies
-        obstacles = new Rectangle[5]; // Obstacles
-        coins = new Coin[3]; // Coins for levels 2 and 3
-
-        levelText = new Text(10, 20, "Level: " + currentLevel);
-        levelText.setFont(new Font(20));
-
-        scoreText = new Text(700, 20, "Score: " + score);
-        scoreText.setFont(new Font(20));
-
-        gamePane.getChildren().addAll(levelText, scoreText);
-        setupLevel();
-
-        scene = new Scene(gamePane, 800, 600);
-        scene.setFill(Color.CYAN);
-
-        scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.RIGHT) {
-                player.moveRight();
-            } else if (event.getCode() == KeyCode.LEFT) {
-                player.moveLeft();
-            } else if (event.getCode() == KeyCode.UP) {
-                player.moveUp();
-            } else if (event.getCode() == KeyCode.DOWN) {
-                player.moveDown();
-            }
-        });
-
-        // Game loop for enemy movement and checking win/lose
-        new AnimationTimer() {
+    public void startGameLoop() {
+        gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (!levelComplete) {
-                    updateGame();
-                    // Update enemy movement
-                    for (Enemy enemy : enemies) {
-                        if (enemy != null) {
-                            enemy.updateMovement();  // You need to define this method in the Enemy class
-                        }
-                    }
-                }
+                update();
+                render();
             }
-        }.start();
+        };
+        gameLoop.start();
     }
-
-    private void setupLevel() {
-        // Clear previous level's objects
-        gamePane.getChildren().clear();
-        gamePane.getChildren().addAll(levelText, scoreText);
-
-        // Reset arrays based on the level
-        if (currentLevel == 1) {
-            enemies = new Enemy[3];
-            obstacles = new Rectangle[2];
-            coins = new Coin[0];
-        } else if (currentLevel == 2) {
-            enemies = new Enemy[5];
-            obstacles = new Rectangle[3];
-            coins = new Coin[2];
-        } else if (currentLevel == 3) {
-            enemies = new Enemy[7];
-            obstacles = new Rectangle[5];
-            coins = new Coin[5];
-        }
-
-        // Draw grid, obstacles, enemies, and coins
-        drawGrid();
-        addGreenTubes();
-        addEnemies();
-        addCoins();
+    private boolean isInsideGameOutline(int x, int y, int width, int height) {
+        Polygon boundary = new Polygon();
+        boundary.getPoints().addAll(
+                (double) m, (double) n,
+                (double) (m + 3 * L), (double) n,
+                (double) (m + 3 * L), (double) (n + 6 * L),
+                (double) (m + 4 * L), (double) (n + 6 * L),
+                (double) (m + 4 * L), (double) (n + L),
+                (double) (m + 11 * L), (double) (n + L),
+                (double) (m + 11 * L), (double) n,
+                (double) (m + 16 * L), (double) n,
+                (double) (m + 16 * L), (double) (n + 7 * L),
+                (double) (m + 13 * L), (double) (n + 7 * L),
+                (double) (m + 13 * L), (double) (n + L),
+                (double) (m + 12 * L), (double) (n + L),
+                (double) (m + 12 * L), (double) (n + 6 * L),
+                (double) (m + 5 * L), (double) (n + 6 * L),
+                (double) (m + 5 * L), (double) (n + 7 * L),
+                (double) m, (double) (n + 7 * L)
+        );
+        // Check all corners of Mario
+        return boundary.contains(x, y) &&                   // Top-left corner
+                boundary.contains(x + width, y) &&           // Top-right corner
+                boundary.contains(x, y + height) &&          // Bottom-left corner
+                boundary.contains(x + width, y + height);    // Bottom-right corner
     }
+    // Adding a direction array for Goombas to control movement direction (right or left)
+    private boolean[] goombaDirection = new boolean[goombaX.length]; // true for right, false for left
 
-    private void drawGrid() {
-        for (int i = 0; i < 800; i += 40) {
-            Rectangle verticalLine = new Rectangle(i, 0, 1, 600);
-            verticalLine.setFill(Color.BLACK);
-            gamePane.getChildren().add(verticalLine);
-        }
-        for (int i = 0; i < 600; i += 40) {
-            Rectangle horizontalLine = new Rectangle(0, i, 800, 1);
-            horizontalLine.setFill(Color.BLACK);
-            gamePane.getChildren().add(horizontalLine);
-        }
-    }
-
-    private void addGreenTubes() {
-        for (int i = 0; i < obstacles.length; i++) {
-            obstacles[i] = new Rectangle(150 + i * 100, 150 + i * 50, 40, 40);
-            obstacles[i].setFill(Color.GREEN);
-            gamePane.getChildren().add(obstacles[i]);
-        }
-    }
-
-    private void addEnemies() {
+    private void initializeEnemies() {
         for (int i = 0; i < enemies.length; i++) {
-            if (enemies[i] == null) {
-                enemies[i] = new Enemy(100 + i * 100, 100);
-            }
-            gamePane.getChildren().add(enemies[i].getShape());
+            enemies[i] = new Enemy(i); // Initialize with specific logic per Goomba
         }
     }
 
-    private void addCoins() {
-        for (int i = 0; i < coins.length; i++) {
-            coins[i] = new Coin(100 + i * 120, 200 + i * 50);
-            gamePane.getChildren().add(coins[i].getShape());
-        }
-    }
-
-    private void updateGame() {
-        for (Rectangle obstacle : obstacles) {
-            if (obstacle != null && player.getShape().getBoundsInParent().intersects(obstacle.getBoundsInParent())) {
-                player.resetPosition();
-            }
-        }
-
+    private void update() {
+        player.update();
         for (Enemy enemy : enemies) {
-            if (enemy != null && player.getShape().getBoundsInParent().intersects(enemy.getShape().getBoundsInParent())) {
-                player.resetPosition();
+            enemy.update();
+            if (player.checkCollision(enemy)) {
+                player.respawn();
+                fails++;
             }
         }
-
-        for (int i = 0; i < coins.length; i++) {
-            if (coins[i] != null && player.getShape().getBoundsInParent().intersects(coins[i].getShape().getBoundsInParent())) {
-                score += 10;
-                gamePane.getChildren().remove(coins[i].getShape());
-                coins[i] = null;
-            }
-        }
-
-        if (player.getShape().getLayoutX() >= 750) {
-            levelComplete = true;
-            showLevelComplete();
-        }
-
-        scoreText.setText("Score: " + score);
     }
 
-    private void showLevelComplete() {
-        Text levelCompleteText = new Text(300, 250, "Level " + currentLevel + " Complete!");
-        levelCompleteText.setFont(new Font(30));
-        gamePane.getChildren().add(levelCompleteText);
+    private void render() {
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setFill(Color.LIGHTSKYBLUE);
+        gc.fillRect(0, 0, 800, 500);
 
-        new Thread(() -> {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        // Draw score borad
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, 800, 50);
+        gc.setFill(Color.WHITE);
+        gc.fillText("Level: " + level, 10, 30);
+        gc.fillText("Fails: " + fails, 700, 30);
+
+        // Set the font size and type
+        gc.setFont(javafx.scene.text.Font.font("TIMES NEW ROMAN", 50));
+        gc.setFill(Color.WHITE);  // Text color
+        gc.fillText("Level: " + level, 3, 43);
+        gc.fillText("Fails: " + fails, 620, 43);
+
+        // Create a Polygon for the border
+        Polygon border = new Polygon();
+        border.getPoints().addAll(
+                (double) m, (double) n, // Starting point
+                (double) (m + 3 * L), (double) n,
+                (double) (m + 3 * L), (double) (n + 6 * L),
+                (double) (m + 4 * L), (double) (n + 6 * L),
+                (double) (m + 4 * L), (double) (n + L),
+                (double) (m + 11 * L), (double) (n + L),
+                (double) (m + 11 * L), (double) n,
+                (double) (m + 16 * L), (double) n,
+                (double) (m + 16 * L), (double) (n + 7 * L),
+                (double) (m + 13 * L), (double) (n + 7 * L),
+                (double) (m + 13 * L), (double) (n + L),
+                (double) (m + 12 * L), (double) (n + L),
+                (double) (m + 12 * L), (double) (n + 6 * L),
+                (double) (m + 5 * L), (double) (n + 6 * L),
+                (double) (m + 5 * L), (double) (n + 7 * L),
+                (double) m, (double) (n + 7 * L)
+        );
+
+        // Set stroke color and width for the outline
+        border.setStroke(Color.BLACK);
+        border.setFill(Color.TRANSPARENT); // Transparent fill for just the outline
+        border.setStrokeWidth(1);
+
+        // Add the polygon to the scene (root group)
+        Group root = (Group) canvas.getParent();
+        root.getChildren().add(border);
+
+        // Set up green tube color
+        Color tubeColor = Color.color(144 / 255f, 238 / 255f, 144 / 255f);  // Green tube color
+        gc.setFill(tubeColor);
+        gc.fillRect(m, n, 120, 280);  // First green tube
+        gc.fillRect(m + 520, n, 120, 280);  // Second green tube
+
+        Color gridColor = Color.color(196 / 255f, 164 / 255f, 132 / 255f);  // Brown color
+
+        for (int i = 0; i < 7; i++) {  // 8 rows of grid
+            for (int j = 0; j < 10; j++) {  // 10 columns of grid
+                int xPos = m + 120 + (j * 40);  // X position for each grid cell
+                int yPos = n + (i * 40);  // Y position for each grid cell
+
+                if (j == 0 && (i >= 0 && i <= 5)) {
+                    continue;
+                }
+                if (j == 9 && (i >= 1 && i <= 6)) {
+                    continue;
+                }
+                if ((i == 0 && j < 8) || (i == 6 && j >= 2)) {
+                    continue; // Skip these squares
+                }
+                if ((i + j) % 2 == 0) {
+                    gc.setFill(gridColor);  // Brown
+                } else {
+                    gc.setFill(Color.WHITE);  // White
+                }
+
+                gc.fillRect(xPos, yPos, 40, 40);  // Fill the grid cell
             }
-            if (currentLevel < 3) {
-                currentLevel++;
-                levelText.setText("Level: " + currentLevel);
-                gamePane.getChildren().remove(levelCompleteText);
-                setupLevel();
-                levelComplete = false;
-            }
-        }).start();
+        }
+
+        // Render Player and Enemies
+        player.render(gc);
+        for (Enemy enemy : enemies) {
+            enemy.render(gc);
+        }
     }
 
-    public Scene getScene() {
-        return scene;
+    private void keyPressed(KeyEvent event) {
+        player.handleKeyPressed(event);
+    }
+
+    private void keyReleased(KeyEvent event) {
+        player.handleKeyReleased(event);
     }
 }
