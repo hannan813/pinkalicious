@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 public class Player {
+    private final int speed;
     private int x, y;
     private int m, n, L;
     private boolean left, right, up, down;
@@ -17,6 +18,8 @@ public class Player {
     public Player(int startX, int startY, int l) {
         this.x = startX;
         this.y = startY;
+        this.L = l;
+        this.speed = 5;
     }
     public boolean isInsideGameOutline(int x, int y) {
         Polygon boundary = new Polygon();

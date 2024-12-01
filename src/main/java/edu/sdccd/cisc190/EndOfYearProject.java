@@ -29,7 +29,7 @@ public class EndOfYearProject extends Application {
         Group root = new Group(canvas);
         Scene scene = new Scene(root);
 
-        game = new Game(canvas); // Initialize the game
+        game = new Game(canvas,scene); // Initialize the game
         game.setupInput(scene);  // Set up input handlers
         game.startGameLoop();   // Start the game loop
 

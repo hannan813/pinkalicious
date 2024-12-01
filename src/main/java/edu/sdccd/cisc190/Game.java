@@ -29,11 +29,14 @@ public class Game {
     private AnimationTimer gameLoop;
     private boolean isInsideGameOutline;
 
-    public Game(Canvas canvas) {
+    public Game(Canvas canvas, Scene scene) {
         this.canvas = canvas;
         this.player = new Player(100, 350, L);
         this.enemies = new Enemy[5];
-        initializeEnemies();
+        initializeEnemies(); // Sets up goombas
+
+        setupInput(scene);
+        startGameLoop();
     }
 
     public void setupInput(Scene scene) {
@@ -45,12 +48,13 @@ public class Game {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                update();
-                render();
+                update(); // This calls the update method to move the player
+                render(); // This calls the render method to draw everything on the screen
             }
         };
-        gameLoop.start();
+        gameLoop.start();// Starts the game loop
     }
+
     private boolean isInsideGameOutline(int x, int y, int width, int height) {
         Polygon boundary = new Polygon();
         boundary.getPoints().addAll(
@@ -77,6 +81,7 @@ public class Game {
                 boundary.contains(x, y + height) &&          // Bottom-left corner
                 boundary.contains(x + width, y + height);    // Bottom-right corner
     }
+
     // Adding a direction array for Goombas to control movement direction (right or left)
     private boolean[] goombaDirection = new boolean[goombaX.length]; // true for right, false for left
 
@@ -87,7 +92,7 @@ public class Game {
     }
 
     private void update() {
-        player.update();
+        player.update();// This calls Player's update method to move Mario
         for (Enemy enemy : enemies) {
             enemy.update();
             if (player.checkCollision(enemy)) {
@@ -102,18 +107,17 @@ public class Game {
         gc.setFill(Color.LIGHTSKYBLUE);
         gc.fillRect(0, 0, 800, 500);
 
-        // Draw score borad
+        // Draw scoreboard
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, 800, 50);
-        gc.setFill(Color.WHITE);
-        gc.fillText("Level: " + level, 10, 30);
-        gc.fillText("Fails: " + fails, 700, 30);
 
         // Set the font size and type
-        gc.setFont(javafx.scene.text.Font.font("TIMES NEW ROMAN", 50));
+        gc.setFont(javafx.scene.text.Font.font("TIMES NEW ROMAN", 50));  // Adjust font size here
         gc.setFill(Color.WHITE);  // Text color
-        gc.fillText("Level: " + level, 3, 43);
-        gc.fillText("Fails: " + fails, 620, 43);
+
+        // Draw level and fail count once
+        gc.fillText("Level: " + level, 10, 40);
+        gc.fillText("Fails: " + fails, 600, 40);
 
         // Create a Polygon for the border
         Polygon border = new Polygon();
@@ -185,10 +189,10 @@ public class Game {
     }
 
     private void keyPressed(KeyEvent event) {
-        player.handleKeyPressed(event);
+        player.handleKeyPressed(event);// Calls the Player method to move when a key is pressed
     }
 
     private void keyReleased(KeyEvent event) {
-        player.handleKeyReleased(event);
+        player.handleKeyReleased(event); // Stops the player from moving when the key is released
     }
 }
