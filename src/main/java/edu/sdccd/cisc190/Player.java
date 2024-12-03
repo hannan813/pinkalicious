@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
 public class Player {
-    private final int speed;
+    private final int speed = 5;
     int x;
     int y;
     private int m, n, L;
@@ -24,8 +24,11 @@ public class Player {
         this.x = startX;
         this.y = startY;
         this.L = l;
-        this.speed = 5;
     }
+
+    public Player(int startX, int startY) {
+    }
+
     public void handleKeyPressed(KeyEvent event) {
         switch (event.getCode()) {
             case LEFT -> left = true;
@@ -101,4 +104,9 @@ public class Player {
     public void respawn() {
         x = 100;
         y = 350;
-    }}
+    }
+
+    public void move(int i, int i1) {
+
+    }
+}

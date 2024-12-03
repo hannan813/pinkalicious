@@ -4,11 +4,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Enemy {
+    public static final int MAX_X = 530; // Right boundary;
+    public static final int MIN_X =240 ;
     private int x, y;
     private boolean movingRight;
     private static final int SPEED = 5;
-    private static final int MIN_X = 240; // Left boundary
-    private static final int MAX_X = 530; // Right boundary
     private static final int GRID_WIDTH = 7; // Adjust the grid width as per your game layout
 
     public Enemy(int index) {

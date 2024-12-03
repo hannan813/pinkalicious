@@ -21,4 +21,8 @@ public class Leaderboard {
     public void display() {
         // Display the leaderboard (could be a simple console print or GUI)
     }
+
+    public ArrayList<String> getScores() {
+        return null;
+    }
 }
