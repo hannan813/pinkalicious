@@ -18,18 +18,18 @@
         <!-- JavaFX Dependencies -->
         <dependency>
             <groupId>org.openjfx</groupId>
-            <artifactId>javafx-base</artifactId>
-            <version>${javafx.version}</version>
+            <artifactId>javafx-controls</artifactId>
+            <version>21.0.5</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
+            <version>21.0.5</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-graphics</artifactId>
-            <version>${javafx.version}</version>
+            <version>21.0.5</version>
         </dependency>
 
         <!-- JUnit for Testing -->
