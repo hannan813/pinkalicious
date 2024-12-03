@@ -1,0 +1,152 @@
+<html>
+<head>
+<title>EndOfYearProject.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+.s4 { color: #6aab73;}
+.s5 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+EndOfYearProject.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">edu</span><span class="s2">.</span><span class="s1">sdccd</span><span class="s2">.</span><span class="s1">cisc190</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">application</span><span class="s2">.</span><span class="s1">Application</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">Scene</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">canvas</span><span class="s2">.</span><span class="s1">Canvas</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">canvas</span><span class="s2">.</span><span class="s1">GraphicsContext</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">input</span><span class="s2">.</span><span class="s1">KeyCode</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">input</span><span class="s2">.</span><span class="s1">KeyEvent</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">layout</span><span class="s2">.</span><span class="s1">Pane</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">paint</span><span class="s2">.</span><span class="s1">Color</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">shape</span><span class="s2">.</span><span class="s1">Polygon</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">Font</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">stage</span><span class="s2">.</span><span class="s1">Stage</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">animation</span><span class="s2">.</span><span class="s1">AnimationTimer</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">EndOfYearProject </span><span class="s0">extends </span><span class="s1">Application </span><span class="s2">{</span>
+    <span class="s0">private int </span><span class="s1">x </span><span class="s2">= </span><span class="s3">100</span><span class="s2">, </span><span class="s1">y </span><span class="s2">= </span><span class="s3">350</span><span class="s2">;</span>
+    <span class="s0">private int </span><span class="s1">a1 </span><span class="s2">= </span><span class="s3">512</span><span class="s2">, </span><span class="s1">a2 </span><span class="s2">= </span><span class="s3">252</span><span class="s2">, </span><span class="s1">av1 </span><span class="s2">= </span><span class="s3">120</span><span class="s2">, </span><span class="s1">av2 </span><span class="s2">= </span><span class="s3">660</span><span class="s2">, </span><span class="s1">b </span><span class="s2">= </span><span class="s3">171</span><span class="s2">, </span><span class="s1">bv </span><span class="s2">= </span><span class="s3">190</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">gameOn </span><span class="s2">= </span><span class="s0">true</span><span class="s2">, </span><span class="s1">left </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">up </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">down </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">right </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+    <span class="s0">private int </span><span class="s1">fails </span><span class="s2">= </span><span class="s3">0</span><span class="s2">, </span><span class="s1">level </span><span class="s2">= </span><span class="s3">1</span><span class="s2">, </span><span class="s1">coins </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">coin1held </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">coin1stored </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">coin2held </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">coin2stored </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+    <span class="s0">private boolean </span><span class="s1">upArea </span><span class="s2">= </span><span class="s0">true</span><span class="s2">, </span><span class="s1">repeat </span><span class="s2">= </span><span class="s0">true</span><span class="s2">, </span><span class="s1">fwrd </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+
+    <span class="s0">private </span><span class="s1">Canvas canvas </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Canvas</span><span class="s2">(</span><span class="s3">800</span><span class="s2">, </span><span class="s3">500</span><span class="s2">);</span>
+    <span class="s0">private int</span><span class="s2">[] </span><span class="s1">xPoints </span><span class="s2">= {</span><span class="s3">72</span><span class="s2">, </span><span class="s3">192</span><span class="s2">, </span><span class="s3">192</span><span class="s2">, </span><span class="s3">232</span><span class="s2">, </span><span class="s3">232</span><span class="s2">, </span><span class="s3">392</span><span class="s2">, </span><span class="s3">392</span><span class="s2">, </span><span class="s3">632</span><span class="s2">, </span><span class="s3">632</span><span class="s2">, </span><span class="s3">512</span><span class="s2">, </span><span class="s3">512</span><span class="s2">, </span><span class="s3">472</span><span class="s2">, </span><span class="s3">472</span><span class="s2">, </span><span class="s3">192</span><span class="s2">, </span><span class="s3">192</span><span class="s2">, </span><span class="s3">72</span><span class="s2">};</span>
+    <span class="s0">private int</span><span class="s2">[] </span><span class="s1">yPoints </span><span class="s2">= {</span><span class="s3">115</span><span class="s2">, </span><span class="s3">115</span><span class="s2">, </span><span class="s3">355</span><span class="s2">, </span><span class="s3">355</span><span class="s2">, </span><span class="s3">155</span><span class="s2">, </span><span class="s3">155</span><span class="s2">, </span><span class="s3">115</span><span class="s2">, </span><span class="s3">115</span><span class="s2">, </span><span class="s3">435</span><span class="s2">, </span><span class="s3">435</span><span class="s2">, </span><span class="s3">155</span><span class="s2">, </span><span class="s3">155</span><span class="s2">, </span><span class="s3">355</span><span class="s2">, </span><span class="s3">355</span><span class="s2">, </span><span class="s3">435</span><span class="s2">, </span><span class="s3">435</span><span class="s2">};</span>
+    <span class="s0">private int </span><span class="s1">numPoints </span><span class="s2">= </span><span class="s1">xPoints</span><span class="s2">.</span><span class="s1">length</span><span class="s2">;</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">start</span><span class="s2">(</span><span class="s1">Stage primaryStage</span><span class="s2">) {</span>
+        <span class="s1">Pane root </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Pane</span><span class="s2">();</span>
+        <span class="s1">root</span><span class="s2">.</span><span class="s1">getChildren</span><span class="s2">().</span><span class="s1">add</span><span class="s2">(</span><span class="s1">canvas</span><span class="s2">);</span>
+
+        <span class="s1">Scene scene </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Scene</span><span class="s2">(</span><span class="s1">root</span><span class="s2">, </span><span class="s3">800</span><span class="s2">, </span><span class="s3">500</span><span class="s2">);</span>
+        <span class="s1">primaryStage</span><span class="s2">.</span><span class="s1">setScene</span><span class="s2">(</span><span class="s1">scene</span><span class="s2">);</span>
+        <span class="s1">primaryStage</span><span class="s2">.</span><span class="s1">setTitle</span><span class="s2">(</span><span class="s4">&quot;End Of Year Project&quot;</span><span class="s2">);</span>
+        <span class="s1">primaryStage</span><span class="s2">.</span><span class="s1">show</span><span class="s2">();</span>
+
+        <span class="s1">scene</span><span class="s2">.</span><span class="s1">setOnKeyPressed</span><span class="s2">(</span><span class="s0">this</span><span class="s1">::keyPressed</span><span class="s2">);</span>
+        <span class="s1">scene</span><span class="s2">.</span><span class="s1">setOnKeyReleased</span><span class="s2">(</span><span class="s0">this</span><span class="s1">::keyReleased</span><span class="s2">);</span>
+
+        <span class="s5">// Game loop using AnimationTimer</span>
+        <span class="s0">new </span><span class="s1">AnimationTimer</span><span class="s2">() {</span>
+            <span class="s1">@Override</span>
+            <span class="s0">public void </span><span class="s1">handle</span><span class="s2">(</span><span class="s0">long </span><span class="s1">now</span><span class="s2">) {</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">gameOn</span><span class="s2">) {</span>
+                    <span class="s1">updateGame</span><span class="s2">();</span>
+                    <span class="s1">drawGame</span><span class="s2">();</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+        <span class="s2">}.</span><span class="s1">start</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">updateGame</span><span class="s2">() {</span>
+        <span class="s0">int </span><span class="s1">c </span><span class="s2">= </span><span class="s3">2</span><span class="s2">, </span><span class="s1">r </span><span class="s2">= </span><span class="s3">3</span><span class="s2">;</span>
+
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">level </span><span class="s2">== </span><span class="s3">1</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">repeat</span><span class="s2">) {</span>
+                <span class="s1">fwrd </span><span class="s2">= !(</span><span class="s1">a2 </span><span class="s2">&gt; </span><span class="s3">512</span><span class="s2">);</span>
+            <span class="s2">}</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">fwrd</span><span class="s2">) {</span>
+                <span class="s1">a2 </span><span class="s2">+= </span><span class="s1">r</span><span class="s2">;</span>
+                <span class="s1">a1 </span><span class="s2">-= </span><span class="s1">r</span><span class="s2">;</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">a2 </span><span class="s2">-= </span><span class="s1">r</span><span class="s2">;</span>
+                <span class="s1">a1 </span><span class="s2">+= </span><span class="s1">r</span><span class="s2">;</span>
+                <span class="s1">repeat </span><span class="s2">= </span><span class="s1">a2 </span><span class="s2">&lt; </span><span class="s3">252</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">right</span><span class="s2">) </span><span class="s1">x </span><span class="s2">+= </span><span class="s1">c</span><span class="s2">;</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">left</span><span class="s2">) </span><span class="s1">x </span><span class="s2">-= </span><span class="s1">c</span><span class="s2">;</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">up</span><span class="s2">) </span><span class="s1">y </span><span class="s2">-= </span><span class="s1">c</span><span class="s2">;</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">down</span><span class="s2">) </span><span class="s1">y </span><span class="s2">+= </span><span class="s1">c</span><span class="s2">;</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">drawGame</span><span class="s2">() {</span>
+        <span class="s1">GraphicsContext gc </span><span class="s2">= </span><span class="s1">canvas</span><span class="s2">.</span><span class="s1">getGraphicsContext2D</span><span class="s2">();</span>
+        <span class="s1">gc</span><span class="s2">.</span><span class="s1">clearRect</span><span class="s2">(</span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s1">canvas</span><span class="s2">.</span><span class="s1">getWidth</span><span class="s2">(), </span><span class="s1">canvas</span><span class="s2">.</span><span class="s1">getHeight</span><span class="s2">());</span>
+
+        <span class="s5">// Background</span>
+        <span class="s1">gc</span><span class="s2">.</span><span class="s1">setFill</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">LIGHTBLUE</span><span class="s2">);</span>
+        <span class="s1">gc</span><span class="s2">.</span><span class="s1">fillRect</span><span class="s2">(</span><span class="s3">0</span><span class="s2">, </span><span class="s3">0</span><span class="s2">, </span><span class="s3">800</span><span class="s2">, </span><span class="s3">500</span><span class="s2">);</span>
+
+        <span class="s5">// Scoreboard</span>
+        <span class="s1">gc</span><span class="s2">.</span><span class="s1">setFill</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">BLACK</span><span class="s2">);</span>
+        <span class="s1">gc</span><span class="s2">.</span><span class="s1">setFont</span><span class="s2">(</span><span class="s1">Font</span><span class="s2">.</span><span class="s1">font</span><span class="s2">(</span><span class="s4">&quot;Times New Roman&quot;</span><span class="s2">, </span><span class="s3">24</span><span class="s2">));</span>
+        <span class="s1">gc</span><span class="s2">.</span><span class="s1">fillText</span><span class="s2">(</span><span class="s4">&quot;Level: &quot; </span><span class="s2">+ </span><span class="s1">level</span><span class="s2">, </span><span class="s3">10</span><span class="s2">, </span><span class="s3">30</span><span class="s2">);</span>
+        <span class="s1">gc</span><span class="s2">.</span><span class="s1">fillText</span><span class="s2">(</span><span class="s4">&quot;Fails: &quot; </span><span class="s2">+ </span><span class="s1">fails</span><span class="s2">, </span><span class="s3">700</span><span class="s2">, </span><span class="s3">30</span><span class="s2">);</span>
+
+        <span class="s5">// Draw Level 1</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">level </span><span class="s2">== </span><span class="s3">1</span><span class="s2">) {</span>
+            <span class="s1">gc</span><span class="s2">.</span><span class="s1">setFill</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">BLACK</span><span class="s2">);</span>
+            <span class="s1">gc</span><span class="s2">.</span><span class="s1">strokePolygon</span><span class="s2">(</span>
+                    <span class="s0">new double</span><span class="s2">[]{</span><span class="s3">72</span><span class="s2">, </span><span class="s3">192</span><span class="s2">, </span><span class="s3">192</span><span class="s2">, </span><span class="s3">232</span><span class="s2">, </span><span class="s3">232</span><span class="s2">, </span><span class="s3">392</span><span class="s2">, </span><span class="s3">392</span><span class="s2">, </span><span class="s3">632</span><span class="s2">, </span><span class="s3">632</span><span class="s2">, </span><span class="s3">512</span><span class="s2">, </span><span class="s3">512</span><span class="s2">, </span><span class="s3">472</span><span class="s2">, </span><span class="s3">472</span><span class="s2">, </span><span class="s3">192</span><span class="s2">, </span><span class="s3">192</span><span class="s2">, </span><span class="s3">72</span><span class="s2">},</span>
+                    <span class="s0">new double</span><span class="s2">[]{</span><span class="s3">115</span><span class="s2">, </span><span class="s3">115</span><span class="s2">, </span><span class="s3">355</span><span class="s2">, </span><span class="s3">355</span><span class="s2">, </span><span class="s3">155</span><span class="s2">, </span><span class="s3">155</span><span class="s2">, </span><span class="s3">115</span><span class="s2">, </span><span class="s3">115</span><span class="s2">, </span><span class="s3">435</span><span class="s2">, </span><span class="s3">435</span><span class="s2">, </span><span class="s3">155</span><span class="s2">, </span><span class="s3">155</span><span class="s2">, </span><span class="s3">355</span><span class="s2">, </span><span class="s3">355</span><span class="s2">, </span><span class="s3">435</span><span class="s2">, </span><span class="s3">435</span><span class="s2">},</span>
+                    <span class="s1">numPoints</span><span class="s2">);</span>
+
+            <span class="s5">// Player (Mario) position</span>
+            <span class="s1">gc</span><span class="s2">.</span><span class="s1">setFill</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">BLUE</span><span class="s2">);</span>
+            <span class="s1">gc</span><span class="s2">.</span><span class="s1">fillRect</span><span class="s2">(</span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">, </span><span class="s3">20</span><span class="s2">, </span><span class="s3">20</span><span class="s2">);</span>
+
+            <span class="s5">// Goombas (Enemies)</span>
+            <span class="s1">gc</span><span class="s2">.</span><span class="s1">setFill</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">BLACK</span><span class="s2">);</span>
+            <span class="s1">gc</span><span class="s2">.</span><span class="s1">fillOval</span><span class="s2">(</span><span class="s1">a1</span><span class="s2">, </span><span class="s1">b</span><span class="s2">, </span><span class="s3">20</span><span class="s2">, </span><span class="s3">20</span><span class="s2">);</span>
+            <span class="s1">gc</span><span class="s2">.</span><span class="s1">fillOval</span><span class="s2">(</span><span class="s1">a2</span><span class="s2">, </span><span class="s1">b </span><span class="s2">+ </span><span class="s3">36</span><span class="s2">, </span><span class="s3">20</span><span class="s2">, </span><span class="s3">20</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">keyPressed</span><span class="s2">(</span><span class="s1">KeyEvent event</span><span class="s2">) {</span>
+        <span class="s1">KeyCode code </span><span class="s2">= </span><span class="s1">event</span><span class="s2">.</span><span class="s1">getCode</span><span class="s2">();</span>
+        <span class="s0">switch </span><span class="s2">(</span><span class="s1">code</span><span class="s2">) {</span>
+            <span class="s0">case </span><span class="s1">LEFT -&gt; left </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">RIGHT -&gt; right </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">UP -&gt; up </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">DOWN -&gt; down </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">keyReleased</span><span class="s2">(</span><span class="s1">KeyEvent event</span><span class="s2">) {</span>
+        <span class="s1">KeyCode code </span><span class="s2">= </span><span class="s1">event</span><span class="s2">.</span><span class="s1">getCode</span><span class="s2">();</span>
+        <span class="s0">switch </span><span class="s2">(</span><span class="s1">code</span><span class="s2">) {</span>
+            <span class="s0">case </span><span class="s1">LEFT -&gt; left </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">RIGHT -&gt; right </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">UP -&gt; up </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+            <span class="s0">case </span><span class="s1">DOWN -&gt; down </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public static void </span><span class="s1">main</span><span class="s2">(</span><span class="s1">String</span><span class="s2">[] </span><span class="s1">args</span><span class="s2">) {</span>
+        <span class="s1">launch</span><span class="s2">(</span><span class="s1">args</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>
