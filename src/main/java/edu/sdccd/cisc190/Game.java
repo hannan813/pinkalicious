@@ -21,6 +21,7 @@ public class Game {
     private Polygon gameOutline;
     private static final int GRID_ROWS = 7;
     private static final int GRID_COLS = 10;
+    private  int SPEED = 5;
 
     public Game(Canvas canvas, Scene scene) {
         this.canvas = canvas;
@@ -47,9 +48,13 @@ public class Game {
         gameLoop.start();
     }
 
+    public int getSpeed() {
+        return SPEED;
+    }
+
     private void initializeEnemies() {
         for (int i = 0; i < enemies.length; i++) {
-            enemies[i] = new Enemy(i);
+            enemies[i] = new Enemy(i,this);
         }
     }
 
@@ -75,6 +80,14 @@ public class Game {
     }
 
     public boolean isInsideGameOutline(int x, int y, int width, int height) {
+        if (x >= 600)
+        {
+            SPEED++;
+            level++;
+            player.respawn();
+return false;
+        }
+
         return gameOutline.contains(x, y) &&
                 gameOutline.contains(x + width, y) &&
                 gameOutline.contains(x, y + height) &&
