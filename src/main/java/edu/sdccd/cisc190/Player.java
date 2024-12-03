@@ -16,12 +16,14 @@ public class Player {
     private boolean movingRight = false;
     private boolean movingUp = false;
     private boolean movingDown = false;
+    private final Game game;
 
-    public Player(int startX, int startY, int l) {
+    public Player(int startX, int startY, int l, Game game) {
         this.x = startX;
         this.y = startY;
         this.L = l;
         this.speed = 5;
+        this.game = game;
     }
     public void handleKeyPressed(KeyEvent event) {
         switch (event.getCode()) {
@@ -56,28 +58,7 @@ public class Player {
                 break;
         }
     }
-    public boolean isInsideGameOutline(int x, int y) {
-        Polygon boundary = new Polygon();
-        boundary.getPoints().addAll(
-                (double) m, (double) n,
-                (double) (m + 3 * L), (double) n,
-                (double) (m + 3 * L), (double) (n + 6 * L),
-                (double) (m + 4 * L), (double) (n + 6 * L),
-                (double) (m + 4 * L), (double) (n + L),
-                (double) (m + 11 * L), (double) (n + L),
-                (double) (m + 11 * L), (double) n,
-                (double) (m + 16 * L), (double) n,
-                (double) (m + 16 * L), (double) (n + 7 * L),
-                (double) (m + 13 * L), (double) (n + 7 * L),
-                (double) (m + 13 * L), (double) (n + L),
-                (double) (m + 12 * L), (double) (n + L),
-                (double) (m + 12 * L), (double) (n + 6 * L),
-                (double) (m + 5 * L), (double) (n + 6 * L),
-                (double) (m + 5 * L), (double) (n + 7 * L),
-                (double) m, (double) (n + 7 * L)
-        );
-        return boundary.contains(x, y);  // This will check if the point (x, y) is inside the polygon
-    }
+
     public void update() {
         int speed = 5;  // Mario’s movement speed
 
@@ -86,13 +67,15 @@ public class Player {
         int newY = y;
 
         // Check for Mario's movement (left, right, up, down)
-        if (movingLeft) newX -= speed;  // Try to move left
+        if (movingLeft)
+            newX -= speed;  // Try to move left
         if (movingRight) newX += speed;  // Try to move right
-        if (movingUp) newY -= speed;  // Try to move up
+        if (movingUp)
+            newY -= speed;  // Try to move up
         if (movingDown) newY += speed;  // Try to move down
 
         // Check if the new position is inside the polygon
-        if (isInsideGameOutline(newX, newY)) {
+        if (game.isInsideGameOutline(newX, newY,0,0)) {
             x = newX;  // If inside, update Mario’s position
             y = newY;
         }

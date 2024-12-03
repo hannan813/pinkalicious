@@ -9,90 +9,85 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
+
 public class Game {
     private final Player player;
-    private Enemy[] enemies;  // Declare the enemies array here
-    private int x = 100, y = 350;
-    private int level = 1, fails = 0, coins = 0;
-    private boolean left = false, up = false, down = false, right = false;
+    private Enemy[] enemies;
+    private int level = 1, fails = 0;
     private boolean repeat = true;
-    private int m = 72, n = 115, L = 40;
-    private int[] xPoints = {m, m + 3 * L, m + 3 * L, m + 4 * L, m + 4 * L, m + 11 * L, m + 11 * L, m + 16 * L, m + 16 * L, m + 13 * L, m + 13 * L, m + 12 * L, m + 12 * L, m + 5 * L, m + 5 * L, m};
-    private int[] yPoints = {n, n, n + 6 * L, n + 6 * L, n + L, n + L, n, n, n + 7 * L, n + 7 * L, n + L, n + L, n + 6 * L, n + 6 * L, n + 7 * L, n + 7 * L};
-    private int numPoints = 16;
-    // Declare Goomba variables here
-    private int[] goombaX = {m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40};
-    private int[] goombaY = {n + 1 * 40, n + 2 * 40, n + 3 * 40, n + 4 * 40, n + 5 * 40};
-    private int goombaSpeed = 4;  // How fast the Goombas move
-    private boolean fwrd = true;  // Direction control for Goombas
-    private Canvas canvas;
-    private AnimationTimer gameLoop;
-    private boolean isInsideGameOutline;
+    private final int m = 72, n = 115, L = 40;
+    private final Canvas canvas;
+    private final AnimationTimer gameLoop;
+    private Polygon gameOutline;
+    private static final int GRID_ROWS = 7;
+    private static final int GRID_COLS = 10;
 
     public Game(Canvas canvas, Scene scene) {
         this.canvas = canvas;
-        this.player = new Player(100, 350, L);
         this.enemies = new Enemy[5];
-        initializeEnemies(); // Sets up goombas
+        this.player = new Player(100, 350, L, this);
+        initializeEnemies();
+        initializeGameOutline();
 
         setupInput(scene);
-        startGameLoop();
-    }
-
-    public void setupInput(Scene scene) {
-        scene.setOnKeyPressed(this::keyPressed);
-        scene.setOnKeyReleased(this::keyReleased);
-    }
-
-    public void startGameLoop() {
         gameLoop = new AnimationTimer() {
+            private long lastUpdate = 0;
+            private static final long FPS = 60;
+            private static final long NANO_FPS = 1_000_000_000 / FPS;
+
             @Override
             public void handle(long now) {
-                update(); // This calls the update method to move the player
-                render(); // This calls the render method to draw everything on the screen
+                if (now - lastUpdate >= NANO_FPS) {
+                    update();
+                    render();
+                    lastUpdate = now;
+                }
             }
         };
-        gameLoop.start();// Starts the game loop
+        gameLoop.start();
     }
-
-    private boolean isInsideGameOutline(int x, int y, int width, int height) {
-        Polygon boundary = new Polygon();
-        boundary.getPoints().addAll(
-                (double) m, (double) n,
-                (double) (m + 3 * L), (double) n,
-                (double) (m + 3 * L), (double) (n + 6 * L),
-                (double) (m + 4 * L), (double) (n + 6 * L),
-                (double) (m + 4 * L), (double) (n + L),
-                (double) (m + 11 * L), (double) (n + L),
-                (double) (m + 11 * L), (double) n,
-                (double) (m + 16 * L), (double) n,
-                (double) (m + 16 * L), (double) (n + 7 * L),
-                (double) (m + 13 * L), (double) (n + 7 * L),
-                (double) (m + 13 * L), (double) (n + L),
-                (double) (m + 12 * L), (double) (n + L),
-                (double) (m + 12 * L), (double) (n + 6 * L),
-                (double) (m + 5 * L), (double) (n + 6 * L),
-                (double) (m + 5 * L), (double) (n + 7 * L),
-                (double) m, (double) (n + 7 * L)
-        );
-        // Check all corners of Mario
-        return boundary.contains(x, y) &&                   // Top-left corner
-                boundary.contains(x + width, y) &&           // Top-right corner
-                boundary.contains(x, y + height) &&          // Bottom-left corner
-                boundary.contains(x + width, y + height);    // Bottom-right corner
-    }
-
-    // Adding a direction array for Goombas to control movement direction (right or left)
-    private boolean[] goombaDirection = new boolean[goombaX.length]; // true for right, false for left
 
     private void initializeEnemies() {
         for (int i = 0; i < enemies.length; i++) {
-            enemies[i] = new Enemy(i); // Initialize with specific logic per Goomba
+            enemies[i] = new Enemy(i);
         }
     }
 
+    private void initializeGameOutline() {
+        gameOutline = new Polygon(
+                m, n,
+                m + 3 * L, n,
+                m + 3 * L, n + 6 * L,
+                m + 4 * L, n + 6 * L,
+                m + 4 * L, n + L,
+                m + 11 * L, n + L,
+                m + 11 * L, n,
+                m + 16 * L, n,
+                m + 16 * L, n + 7 * L,
+                m + 13 * L, n + 7 * L,
+                m + 13 * L, n + L,
+                m + 12 * L, n + L,
+                m + 12 * L, n + 6 * L,
+                m + 5 * L, n + 6 * L,
+                m + 5 * L, n + 7 * L,
+                m, n + 7 * L
+        );
+    }
+
+    public boolean isInsideGameOutline(int x, int y, int width, int height) {
+        return gameOutline.contains(x, y) &&
+                gameOutline.contains(x + width, y) &&
+                gameOutline.contains(x, y + height) &&
+                gameOutline.contains(x + width, y + height);
+    }
+
+    private void setupInput(Scene scene) {
+        scene.setOnKeyPressed(event -> player.handleKeyPressed(event));
+        scene.setOnKeyReleased(event -> player.handleKeyReleased(event));
+    }
+
     private void update() {
-        player.update();// This calls Player's update method to move Mario
+        player.update();
         for (Enemy enemy : enemies) {
             enemy.update();
             if (player.checkCollision(enemy)) {
@@ -104,95 +99,55 @@ public class Game {
 
     private void render() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
+        // Background
         gc.setFill(Color.LIGHTSKYBLUE);
-        gc.fillRect(0, 0, 800, 500);
+        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
-        // Draw scoreboard
+        // Scoreboard
         gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, 800, 50);
-
-        // Set the font size and type
-        gc.setFont(javafx.scene.text.Font.font("TIMES NEW ROMAN", 50));  // Adjust font size here
-        gc.setFill(Color.WHITE);  // Text color
-
-        // Draw level and fail count once
+        gc.fillRect(0, 0, canvas.getWidth(), 50);
+        gc.setFill(Color.WHITE);
+        gc.setFont(javafx.scene.text.Font.font("TIMES NEW ROMAN", 50));
         gc.fillText("Level: " + level, 10, 40);
-        gc.fillText("Fails: " + fails, 600, 40);
+        gc.fillText("Fails: " + fails, canvas.getWidth() - 200, 40);
 
-        // Create a Polygon for the border
-        Polygon border = new Polygon();
-        border.getPoints().addAll(
-                (double) m, (double) n, // Starting point
-                (double) (m + 3 * L), (double) n,
-                (double) (m + 3 * L), (double) (n + 6 * L),
-                (double) (m + 4 * L), (double) (n + 6 * L),
-                (double) (m + 4 * L), (double) (n + L),
-                (double) (m + 11 * L), (double) (n + L),
-                (double) (m + 11 * L), (double) n,
-                (double) (m + 16 * L), (double) n,
-                (double) (m + 16 * L), (double) (n + 7 * L),
-                (double) (m + 13 * L), (double) (n + 7 * L),
-                (double) (m + 13 * L), (double) (n + L),
-                (double) (m + 12 * L), (double) (n + L),
-                (double) (m + 12 * L), (double) (n + 6 * L),
-                (double) (m + 5 * L), (double) (n + 6 * L),
-                (double) (m + 5 * L), (double) (n + 7 * L),
-                (double) m, (double) (n + 7 * L)
-        );
+        // Static elements
+        renderStaticElements(gc);
 
-        // Set stroke color and width for the outline
-        border.setStroke(Color.BLACK);
-        border.setFill(Color.TRANSPARENT); // Transparent fill for just the outline
-        border.setStrokeWidth(1);
-
-        // Add the polygon to the scene (root group)
-        Group root = (Group) canvas.getParent();
-        root.getChildren().add(border);
-
-        // Set up green tube color
-        Color tubeColor = Color.color(144 / 255f, 238 / 255f, 144 / 255f);  // Green tube color
-        gc.setFill(tubeColor);
-        gc.fillRect(m, n, 120, 280);  // First green tube
-        gc.fillRect(m + 520, n, 120, 280);  // Second green tube
-
-        Color gridColor = Color.color(196 / 255f, 164 / 255f, 132 / 255f);  // Brown color
-
-        for (int i = 0; i < 7; i++) {  // 8 rows of grid
-            for (int j = 0; j < 10; j++) {  // 10 columns of grid
-                int xPos = m + 120 + (j * 40);  // X position for each grid cell
-                int yPos = n + (i * 40);  // Y position for each grid cell
-
-                if (j == 0 && (i >= 0 && i <= 5)) {
-                    continue;
-                }
-                if (j == 9 && (i >= 1 && i <= 6)) {
-                    continue;
-                }
-                if ((i == 0 && j < 8) || (i == 6 && j >= 2)) {
-                    continue; // Skip these squares
-                }
-                if ((i + j) % 2 == 0) {
-                    gc.setFill(gridColor);  // Brown
-                } else {
-                    gc.setFill(Color.WHITE);  // White
-                }
-
-                gc.fillRect(xPos, yPos, 40, 40);  // Fill the grid cell
-            }
-        }
-
-        // Render Player and Enemies
+        // Render player and enemies
         player.render(gc);
         for (Enemy enemy : enemies) {
             enemy.render(gc);
         }
     }
 
-    private void keyPressed(KeyEvent event) {
-        player.handleKeyPressed(event);// Calls the Player method to move when a key is pressed
+    private void renderStaticElements(GraphicsContext gc) {
+        // Green tubes
+        gc.setFill(Color.LIMEGREEN);
+        gc.fillRect(m, n, 120, 280);
+        gc.fillRect(m + 520, n, 120, 280);
+
+        // Grid
+        Color brown = Color.color(0.77, 0.64, 0.52);
+        for (int i = 0; i < GRID_ROWS; i++) {
+            for (int j = 0; j < GRID_COLS; j++) {
+                int xPos = m + 120 + (j * 40);
+                int yPos = n + (i * 40);
+
+                if (shouldSkipGridCell(i, j)) continue;
+
+                gc.setFill((i + j) % 2 == 0 ? brown : Color.WHITE);
+                gc.fillRect(xPos, yPos, 40, 40);
+            }
+        }
     }
 
-    private void keyReleased(KeyEvent event) {
-        player.handleKeyReleased(event); // Stops the player from moving when the key is released
+    private boolean shouldSkipGridCell(int i, int j) {
+        return (j == 0 && i <= 5) ||
+                (j == GRID_COLS - 1 && i >= 1) ||
+                (i == 0 && j < GRID_COLS - 2) ||
+                (i == GRID_ROWS - 1 && j >= 2);
     }
 }

@@ -13,7 +13,7 @@ public class EndOfYearProject extends Application {
         int m = 100;  // Example starting coordinates
         int n = 50;
         int L = 20;  // Example scale factor
-        Player player = new Player(m, n, L);  // Pass m, n, and L to the Player constructor
+//        Player player = new Player(m, n, L);  // Pass m, n, and L to the Player constructor
         // Now the player object can use m, n, and L
         launch(args);
     }
@@ -29,8 +29,8 @@ public class EndOfYearProject extends Application {
         Scene scene = new Scene(root);
 
         game = new Game(canvas,scene); // Initialize the game
-        game.setupInput(scene);  // Set up input handlers
-        game.startGameLoop();   // Start the game loop
+//        game.setupInput(scene);  // Set up input handlers
+//        game.startGameLoop();   // Start the game loop
 
         primaryStage.setTitle("End of Year Project");
         primaryStage.setScene(scene);

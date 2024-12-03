@@ -9,32 +9,28 @@ public class Enemy {
     private static final int SPEED = 5;
     private static final int MIN_X = 240; // Left boundary
     private static final int MAX_X = 530; // Right boundary
-    private static final int GRID_WIDTH = 7; // Adjust the grid width as per your game layout
+    private static final int WIDTH = 20; // Enemy width
+    private static final Color ENEMY_COLOR = Color.SADDLEBROWN; // Cache color
 
     public Enemy(int index) {
+        // Precompute initial position and direction based on index
         this.x = (index % 2 == 0) ? 300 : 500;
         this.y = 160 + index * 40;
         this.movingRight = index % 2 == 0;
     }
 
     public void update() {
-        // Move the enemy left or right
-        if (movingRight) x += SPEED;
-        else x -= SPEED;
-
-        // Reverse direction if hitting boundary
+        // Move and toggle direction at boundaries
+        x += movingRight ? SPEED : -SPEED;
         if (x <= MIN_X || x >= MAX_X) {
             movingRight = !movingRight;
         }
-
-        // Keep the enemy within bounds by constraining x to [MIN_X, MAX_X]
-        if (x < MIN_X) x = MIN_X;
-        if (x > MAX_X) x = MAX_X;
     }
 
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.SADDLEBROWN); // The coding for the Goombas (where the image would go)
-        gc.fillOval(x, y, 20, 20); // Draw the enemy (Goomba)
+        // Draw enemy
+        gc.setFill(ENEMY_COLOR);
+        gc.fillOval(x, y, WIDTH, WIDTH);
     }
 
     public int getX() {
