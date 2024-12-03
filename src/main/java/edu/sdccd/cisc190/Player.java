@@ -1,5 +1,6 @@
 package edu.sdccd.cisc190;
 
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -7,15 +8,17 @@ import javafx.scene.shape.Polygon;
 
 public class Player {
     private final int speed;
-    private int x, y;
+    int x;
+    int y;
     private int m, n, L;
     private boolean left, right, up, down;
     private boolean isInsideGameOutline;
     int width, height;
-    private boolean movingLeft = false;
-    private boolean movingRight = false;
+    boolean movingLeft = false;
+    boolean movingRight = false;
     private boolean movingUp = false;
     private boolean movingDown = false;
+
 
     public Player(int startX, int startY, int l) {
         this.x = startX;
@@ -25,35 +28,18 @@ public class Player {
     }
     public void handleKeyPressed(KeyEvent event) {
         switch (event.getCode()) {
-            case LEFT:  // Left arrow key
-                movingLeft = true;
-                break;
-            case RIGHT:  // Right arrow key
-                movingRight = true;
-                break;
-            case UP:  // Up arrow key
-                movingUp = true;
-                break;
-            case DOWN:  // Down arrow key
-                movingDown = true;
-                break;
+            case LEFT -> left = true;
+            case RIGHT -> right = true;
+            case UP -> up = true;
+            case DOWN -> down = true;
         }
     }
-
     public void handleKeyReleased(KeyEvent event) {
         switch (event.getCode()) {
-            case LEFT:
-                movingLeft = false;
-                break;
-            case RIGHT:
-                movingRight = false;
-                break;
-            case UP:
-                movingUp = false;
-                break;
-            case DOWN:
-                movingDown = false;
-                break;
+            case LEFT -> left = false;
+            case RIGHT -> right = false;
+            case UP -> up = false;
+            case DOWN -> down = false;
         }
     }
     public boolean isInsideGameOutline(int x, int y) {
@@ -81,15 +67,18 @@ public class Player {
     public void update() {
         int speed = 5;  // Mario’s movement speed
 
+
         // Store Mario's new position
         int newX = x;
         int newY = y;
+
 
         // Check for Mario's movement (left, right, up, down)
         if (movingLeft) newX -= speed;  // Try to move left
         if (movingRight) newX += speed;  // Try to move right
         if (movingUp) newY -= speed;  // Try to move up
         if (movingDown) newY += speed;  // Try to move down
+
 
         // Check if the new position is inside the polygon
         if (isInsideGameOutline(newX, newY)) {
@@ -108,10 +97,8 @@ public class Player {
                 && y < enemy.getY() + 20 && y + 20 > enemy.getY();
     }
 
+
     public void respawn() {
         x = 100;
         y = 350;
-    }
-
-}
-
+    }}
