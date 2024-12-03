@@ -7,7 +7,7 @@ public class Enemy {
     private int x, y;
     private boolean movingRight;
     private static final int SPEED = 5;
-    private static final int MIN_X = 230; // Left boundary
+    private static final int MIN_X = 240; // Left boundary
     private static final int MAX_X = 530; // Right boundary
     private static final int GRID_WIDTH = 7; // Adjust the grid width as per your game layout
 

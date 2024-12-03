@@ -11,15 +11,50 @@ public class Player {
     private int m, n, L;
     private boolean left, right, up, down;
     private boolean isInsideGameOutline;
-
-
     int width, height;
+    private boolean movingLeft = false;
+    private boolean movingRight = false;
+    private boolean movingUp = false;
+    private boolean movingDown = false;
 
     public Player(int startX, int startY, int l) {
         this.x = startX;
         this.y = startY;
         this.L = l;
         this.speed = 5;
+    }
+    public void handleKeyPressed(KeyEvent event) {
+        switch (event.getCode()) {
+            case LEFT:  // Left arrow key
+                movingLeft = true;
+                break;
+            case RIGHT:  // Right arrow key
+                movingRight = true;
+                break;
+            case UP:  // Up arrow key
+                movingUp = true;
+                break;
+            case DOWN:  // Down arrow key
+                movingDown = true;
+                break;
+        }
+    }
+
+    public void handleKeyReleased(KeyEvent event) {
+        switch (event.getCode()) {
+            case LEFT:
+                movingLeft = false;
+                break;
+            case RIGHT:
+                movingRight = false;
+                break;
+            case UP:
+                movingUp = false;
+                break;
+            case DOWN:
+                movingDown = false;
+                break;
+        }
     }
     public boolean isInsideGameOutline(int x, int y) {
         Polygon boundary = new Polygon();
@@ -51,10 +86,10 @@ public class Player {
         int newY = y;
 
         // Check for Mario's movement (left, right, up, down)
-        if (left) newX -= speed;  // Try to move left
-        if (right) newX += speed;  // Try to move right
-        if (up) newY -= speed;  // Try to move up
-        if (down) newY += speed;  // Try to move down
+        if (movingLeft) newX -= speed;  // Try to move left
+        if (movingRight) newX += speed;  // Try to move right
+        if (movingUp) newY -= speed;  // Try to move up
+        if (movingDown) newY += speed;  // Try to move down
 
         // Check if the new position is inside the polygon
         if (isInsideGameOutline(newX, newY)) {
@@ -78,21 +113,5 @@ public class Player {
         y = 350;
     }
 
-    public void handleKeyPressed(KeyEvent event) {
-        switch (event.getCode()) {
-            case LEFT -> left = true;
-            case RIGHT -> right = true;
-            case UP -> up = true;
-            case DOWN -> down = true;
-        }
-    }
-
-    public void handleKeyReleased(KeyEvent event) {
-        switch (event.getCode()) {
-            case LEFT -> left = false;
-            case RIGHT -> right = false;
-            case UP -> up = false;
-            case DOWN -> down = false;
-        }
-    }
 }
+

@@ -13,7 +13,6 @@ public class EndOfYearProject extends Application {
         int m = 100;  // Example starting coordinates
         int n = 50;
         int L = 20;  // Example scale factor
-
         Player player = new Player(m, n, L);  // Pass m, n, and L to the Player constructor
         // Now the player object can use m, n, and L
         launch(args);
