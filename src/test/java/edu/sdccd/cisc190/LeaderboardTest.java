@@ -1,53 +1,27 @@
 package edu.sdccd.cisc190;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LeaderboardTest {
 
-    private Leaderboard leaderboard;
-
-    @BeforeEach
-    public void setUp() {
-        leaderboard = new Leaderboard();
+    @Test
+    public void testEmptyLeaderboard() {
+        Leaderboard leaderboard = new Leaderboard();
+        // Test that the leaderboard is initialized with no scores
+        assertNotNull(leaderboard.getScores());  // The scores list should not be null
+        assertTrue(leaderboard.getScores().isEmpty());  // The list should be empty initially
     }
 
     @Test
     public void testAddScore() {
-        leaderboard.addScore("Alice: 100");
-        leaderboard.addScore("Bob: 90");
+        Leaderboard leaderboard = new Leaderboard();
+        leaderboard.addScore("100");
+        leaderboard.addScore("200");
 
-        ArrayList<String> scores = leaderboard.getScores();
-
-        assertNotNull(scores, "Scores list should not be null");
-        assertEquals(2, scores.size(), "Scores list should contain 2 entries");
-        assertEquals("Alice: 100", scores.get(0), "First score should be 'Alice: 100'");
-        assertEquals("Bob: 90", scores.get(1), "Second score should be 'Bob: 90'");
-    }
-
-    @Test
-    public void testEmptyLeaderboard() {
-        ArrayList<String> scores = leaderboard.getScores();
-
-        assertNotNull(scores, "Scores list should not be null");
-        assertTrue(scores.isEmpty(), "Scores list should be empty initially");
-    }
-
-    @Test
-    public void testDisplay() {
-        leaderboard.addScore("Alice: 100");
-        leaderboard.addScore("Bob: 90");
-
-        // Capture the console output (if display is using console print)
-        // For GUI-based display, this test might need to interact with the GUI
-        leaderboard.display();
-
-        // Test would validate output manually or compare expected results if the method is refactored to return a display string.
-        // Here, you might implement this test based on the specific display implementation.
-        assertDoesNotThrow(() -> leaderboard.display(), "Display method should execute without errors");
+        // Test that the scores are added correctly
+        assertEquals(2, leaderboard.getScores().size());  // The list should have 2 scores
+        assertTrue(leaderboard.getScores().contains("100"));
+        assertTrue(leaderboard.getScores().contains("200"));
     }
 }

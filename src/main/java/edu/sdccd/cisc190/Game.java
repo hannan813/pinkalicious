@@ -23,15 +23,14 @@ public class Game {
     // Declare Goomba variables here
     private int[] goombaX = {m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40, m + 120 + 8 * 40};
     private int[] goombaY = {n + 1 * 40, n + 2 * 40, n + 3 * 40, n + 4 * 40, n + 5 * 40};
-    private int goombaSpeed = 4;  // How fast the Goombas move
-    private boolean fwrd = true;  // Direction control for Goombas
     private Canvas canvas;
     private AnimationTimer gameLoop;
     private boolean isInsideGameOutline;
+    private Polygon gameOutline;
 
     public Game(Canvas canvas, Scene scene) {
         this.canvas = canvas;
-        this.player = new Player(100, 350, L);
+        this.player = new Player(100, 350, 40);
         this.enemies = new Enemy[5];
         initializeEnemies(); // Sets up goombas
 
@@ -54,36 +53,6 @@ public class Game {
         };
         gameLoop.start();// Starts the game loop
     }
-
-    private boolean isInsideGameOutline(int x, int y, int width, int height) {
-        Polygon boundary = new Polygon();
-        boundary.getPoints().addAll(
-                (double) m, (double) n,
-                (double) (m + 3 * L), (double) n,
-                (double) (m + 3 * L), (double) (n + 6 * L),
-                (double) (m + 4 * L), (double) (n + 6 * L),
-                (double) (m + 4 * L), (double) (n + L),
-                (double) (m + 11 * L), (double) (n + L),
-                (double) (m + 11 * L), (double) n,
-                (double) (m + 16 * L), (double) n,
-                (double) (m + 16 * L), (double) (n + 7 * L),
-                (double) (m + 13 * L), (double) (n + 7 * L),
-                (double) (m + 13 * L), (double) (n + L),
-                (double) (m + 12 * L), (double) (n + L),
-                (double) (m + 12 * L), (double) (n + 6 * L),
-                (double) (m + 5 * L), (double) (n + 6 * L),
-                (double) (m + 5 * L), (double) (n + 7 * L),
-                (double) m, (double) (n + 7 * L)
-        );
-        // Check all corners of Mario
-        return boundary.contains(x, y) &&                   // Top-left corner
-                boundary.contains(x + width, y) &&           // Top-right corner
-                boundary.contains(x, y + height) &&          // Bottom-left corner
-                boundary.contains(x + width, y + height);    // Bottom-right corner
-    }
-
-    // Adding a direction array for Goombas to control movement direction (right or left)
-    private boolean[] goombaDirection = new boolean[goombaX.length]; // true for right, false for left
 
     private void initializeEnemies() {
         for (int i = 0; i < enemies.length; i++) {
