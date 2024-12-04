@@ -3,24 +3,26 @@ package edu.sdccd.cisc190;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Enemy {
-    public static final int MAX_X = 530; // Right boundary;
-    public static final int MIN_X =240 ;
-    private int x, y;
-    private boolean movingRight;
-    private static final int SPEED = 3;
-    private static final int GRID_WIDTH = 7; // Adjust the grid width as per your game layout
+public class Enemy extends GameObject {
+    public static final int MAX_X = 530;  // Right boundary
+    public static final int MIN_X = 240;  // Left boundary
+    private boolean movingRight;  // Direction flag
+    private static final int SPEED = 3;  // Speed of the enemy
 
+    // Constructor
     public Enemy(int index) {
-        this.x = (index % 2 == 0) ? 300 : 500;
-        this.y = 160 + index * 40;
-        this.movingRight = index % 2 == 0;
+        super( (index % 2 == 0) ? 300 : 500, 160 + index * 40); // Set initial position
+        this.movingRight = index % 2 == 0;  // Alternate movement direction based on index
     }
 
+    @Override
     public void update() {
         // Move the enemy left or right
-        if (movingRight) x += SPEED;
-        else x -= SPEED;
+        if (movingRight) {
+            this.x += SPEED;  // Use inherited x
+        } else {
+            this.x -= SPEED;  // Use inherited x
+        }
 
         // Reverse direction if hitting boundary
         if (x <= MIN_X || x >= MAX_X) {
@@ -32,16 +34,9 @@ public class Enemy {
         if (x > MAX_X) x = MAX_X;
     }
 
+    @Override
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.SADDLEBROWN); // The coding for the Goombas (where the image would go)
-        gc.fillOval(x, y, 20, 20); // Draw the enemy (Goomba)
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
+        gc.setFill(Color.SADDLEBROWN);  // Set the color for the Goomba
+        gc.fillOval(x, y, 20, 20);  // Draw the Goomba (using x, y from GameObject)
     }
 }

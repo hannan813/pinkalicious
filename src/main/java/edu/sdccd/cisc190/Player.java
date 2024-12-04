@@ -6,28 +6,29 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.geometry.Rectangle2D;
 
-public class Player {
+public class Player extends GameObject {
     private final int speed = 5;
-    public boolean movingLeft;
-    public boolean movingRight;
-    int x;
-    int y;
+    boolean movingLeft;
+    boolean movingRight;
+    private int L;
     private int m;
     private int n;
-    private int L;
     private boolean left, right, up, down;
 
+    // Constructor (inherits x, y from GameObject)
     public Player(int startX, int startY, int size) {
-        this.x = startX;
-        this.y = startY;
+        super(startX, startY);  // Call the GameObject constructor to set x, y
         this.L = size;
         this.m = 72;
         this.n = 115;
     }
 
+    // Constructor (optional, if needed for a different initialization)
     public Player(int startX, int startY) {
+        super(startX, startY);  // Call the GameObject constructor to set x, y
     }
 
+    // Handle key press events
     public void handleKeyPressed(KeyEvent event) {
         switch (event.getCode()) {
             case LEFT -> left = true;
@@ -37,6 +38,7 @@ public class Player {
         }
     }
 
+    // Handle key release events
     public void handleKeyReleased(KeyEvent event) {
         switch (event.getCode()) {
             case LEFT -> left = false;
@@ -46,6 +48,7 @@ public class Player {
         }
     }
 
+    // Check if the player is inside the game boundary
     public boolean isInsideGameOutline(int x, int y) {
         Polygon boundary = new Polygon(
                 m, n, m + 3 * L, n, m + 3 * L, n + 6 * L,
@@ -60,6 +63,7 @@ public class Player {
         return boundary.contains(x, y);
     }
 
+    // Update player position based on key input
     public void update() {
         int newX = x, newY = y;
 
@@ -68,29 +72,32 @@ public class Player {
         if (up) newY -= speed;
         if (down) newY += speed;
 
-        if (isInsideGameOutline(newX, newY)) {
+        if (isInsideGameOutline(newX, newY)) { // Conditional to ensure valid movement
             x = newX;
             y = newY;
         }
     }
 
+    // Render the player (draw player at x, y position)
     public void render(GraphicsContext gc) {
         gc.setFill(Color.BLUE);
         gc.fillRect(x, y, L, L);
     }
 
+    // Check for collision with enemy
     public boolean checkCollision(Enemy enemy) {
         Rectangle2D playerBounds = new Rectangle2D(x, y, L, L);
         Rectangle2D enemyBounds = new Rectangle2D(enemy.getX(), enemy.getY(), 40, 40);
         return playerBounds.intersects(enemyBounds);
     }
 
+    // Respawn player to a starting position
     public void respawn() {
         x = 100;
         y = 350;
     }
 
+    // Unused method (remove or implement as needed)
     public void move(int i, int i1) {
-
     }
 }
