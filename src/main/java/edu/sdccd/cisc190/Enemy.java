@@ -11,8 +11,12 @@ public class Enemy extends GameObject {
 
     // Constructor
     public Enemy(int index) {
-        super( (index % 2 == 0) ? 300 : 500, 160 + index * 40); // Set initial position
-        this.movingRight = index % 2 == 0;  // Alternate movement direction based on index
+        super(
+                (index % 2 == 0) ? 300 : 500, // x position
+                160 + index * 40,             // y position
+                "resources/goomba.png"        // Path to sprite
+        );
+        this.movingRight = index % 2 == 0; // Alternate movement direction
     }
 
     @Override

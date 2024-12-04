@@ -85,12 +85,7 @@ public class Player extends GameObject {
     }
 
     // Check for collision with enemy
-    public boolean checkCollision(Enemy enemy) {
-        Rectangle2D playerBounds = new Rectangle2D(x, y, L, L);
-        Rectangle2D enemyBounds = new Rectangle2D(enemy.getX(), enemy.getY(), 40, 40);
-        return playerBounds.intersects(enemyBounds);
-    }
-
+   
     // Respawn player to a starting position
     public void respawn() {
         x = 100;
@@ -100,4 +95,10 @@ public class Player extends GameObject {
     // Unused method (remove or implement as needed)
     public void move(int i, int i1) {
     }
+
+    public boolean checkCollision(Enemy enemy) {
+        return x < enemy.getX() + 20 && x + 20 > enemy.getX()
+                && y < enemy.getY() + 20 && y + 20 > enemy.getY();
+    }
+
 }

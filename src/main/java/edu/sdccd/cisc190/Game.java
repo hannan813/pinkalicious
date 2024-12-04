@@ -156,7 +156,10 @@ public class Game {
             enemy.render(gc);
         }
     }
-
+    public boolean checkCollision(Enemy enemy) {
+        return x < enemy.getX() + 20 && x + 20 > enemy.getX()
+                && y < enemy.getY() + 20 && y + 20 > enemy.getY();
+    }
     private void keyPressed(KeyEvent event) {
         player.handleKeyPressed(event);// Calls the Player method to move when a key is pressed
     }

@@ -1,24 +1,26 @@
 package edu.sdccd.cisc190;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
-public class GameObject {
-    protected int x, y;  // Position variables
+public abstract class GameObject {
+    protected int x, y; // Position variables
+    protected Image sprite; // Image for the game object
 
     // Constructor
-    public GameObject(int x, int y) {
+    public GameObject(int x, int y, String spritePath) {
         this.x = x;
         this.y = y;
+        this.sprite = new Image(spritePath); // Load the image
     }
 
-    // Abstract update method to be overridden in subclasses
-    public void update() {
-        // Default implementation or empty if subclasses will provide their own
-    }
+    // Update method to be overridden in subclasses
+    public abstract void update();
 
-    // Abstract render method to be overridden in subclasses
+    // Render method to be overridden in subclasses
     public void render(GraphicsContext gc) {
-        // Default implementation or empty if subclasses will provide their own
+        // Default: Draw the sprite
+        gc.drawImage(sprite, x, y, 50, 50); // Draw the image at (x, y), size 50x50
     }
 
     // Getters for position
