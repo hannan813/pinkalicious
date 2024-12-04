@@ -21,7 +21,7 @@ public class Game {
     private Polygon gameOutline;
     private static final int GRID_ROWS = 7;
     private static final int GRID_COLS = 10;
-    private  int SPEED = 5;
+    private  int SPEED = 2;
 
     public Game(Canvas canvas, Scene scene) {
         this.canvas = canvas;
