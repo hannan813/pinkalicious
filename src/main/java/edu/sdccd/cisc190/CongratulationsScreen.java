@@ -13,4 +13,3 @@ public class CongratulationsScreen {
         return congratsPane;
     }
 }
-
