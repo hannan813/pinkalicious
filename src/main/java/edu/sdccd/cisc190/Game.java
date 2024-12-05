@@ -9,11 +9,17 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Game {
     private final Player player;
     private Enemy[] enemies;
     private int level = 1, fails = 0;
+    private int currentLevel = 1;  // Track current level
+    private int score = 0;  // Track score
+    private List<Coin> coins = new ArrayList<>();  // List to hold coins
     private boolean repeat = true;
     private final int m = 72, n = 115, L = 40;
     private final Canvas canvas;
@@ -22,6 +28,32 @@ public class Game {
     private static final int GRID_ROWS = 7;
     private static final int GRID_COLS = 10;
     private  int SPEED = 2;
+
+    public void startLevel(int level) {
+        this.currentLevel = level;
+
+        if (level >= 2) {
+            // Clear existing coins before adding new ones for the level
+            coins.clear();
+            // Add new coins for level 2 and up
+            coins.add(new Coin(100, 200));
+            coins.add(new Coin(200, 300));
+            coins.add(new Coin(300, 400));
+        }
+    }
+    // Method to increment the score when a coin is collected
+    public void incrementScore() {
+        score++;
+    }
+    // Method to get the current score
+    public int getScore() {
+        return score;
+    }
+
+    // Method to get the list of coins
+    public List<Coin> getCoins() {
+        return coins;
+    }
 
     public Game(Canvas canvas, Scene scene) {
         this.canvas = canvas;
@@ -134,6 +166,7 @@ return false;
         for (Enemy enemy : enemies) {
             enemy.render(gc);
         }
+
     }
 
     private void renderStaticElements(GraphicsContext gc) {

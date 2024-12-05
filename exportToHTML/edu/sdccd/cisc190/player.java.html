@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>player.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+player.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">edu</span><span class="s2">.</span><span class="s1">sdccd</span><span class="s2">.</span><span class="s1">cisc190</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">canvas</span><span class="s2">.</span><span class="s1">GraphicsContext</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">paint</span><span class="s2">.</span><span class="s1">Color</span><span class="s2">;</span>
+
+    <span class="s0">public class </span><span class="s1">player </span><span class="s2">{</span>
+
+        <span class="s0">private int </span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">;</span>
+
+        <span class="s0">public </span><span class="s1">player</span><span class="s2">(</span><span class="s0">int </span><span class="s1">startX</span><span class="s2">, </span><span class="s0">int </span><span class="s1">startY</span><span class="s2">) {</span>
+            <span class="s1">x </span><span class="s2">= </span><span class="s1">startX</span><span class="s2">;</span>
+            <span class="s1">y </span><span class="s2">= </span><span class="s1">startY</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public void </span><span class="s1">move</span><span class="s2">(</span><span class="s0">int </span><span class="s1">dx</span><span class="s2">, </span><span class="s0">int </span><span class="s1">dy</span><span class="s2">) {</span>
+            <span class="s1">x </span><span class="s2">+= </span><span class="s1">dx</span><span class="s2">;</span>
+            <span class="s1">y </span><span class="s2">+= </span><span class="s1">dy</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public void </span><span class="s1">draw</span><span class="s2">(</span><span class="s1">GraphicsContext gc</span><span class="s2">) {</span>
+            <span class="s1">gc</span><span class="s2">.</span><span class="s1">setFill</span><span class="s2">(</span><span class="s1">Color</span><span class="s2">.</span><span class="s1">BLUE</span><span class="s2">);</span>
+            <span class="s1">gc</span><span class="s2">.</span><span class="s1">fillRect</span><span class="s2">(</span><span class="s1">x</span><span class="s2">, </span><span class="s1">y</span><span class="s2">, </span><span class="s3">20</span><span class="s2">, </span><span class="s3">20</span><span class="s2">);</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public int </span><span class="s1">getX</span><span class="s2">() {</span>
+            <span class="s0">return </span><span class="s1">x</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s0">public int </span><span class="s1">getY</span><span class="s2">() {</span>
+            <span class="s0">return </span><span class="s1">y</span><span class="s2">;</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+</pre>
+</body>
+</html>

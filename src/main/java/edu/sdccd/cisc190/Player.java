@@ -1,29 +1,29 @@
 package edu.sdccd.cisc190;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
+
+import java.awt.*;
 
 public class Player {
     private final int speed;
     private int x, y;
-    private int m, n, L;
-    private boolean left, right, up, down;
-    private boolean isInsideGameOutline;
-    int width, height;
     private boolean movingLeft = false;
     private boolean movingRight = false;
     private boolean movingUp = false;
     private boolean movingDown = false;
     private final Game game;
+    private final Image sprite; // Use JavaFX Image for sprite
 
     public Player(int startX, int startY, int l, Game game) {
         this.x = startX;
         this.y = startY;
-        this.L = l;
         this.speed = 5;
         this.game = game;
+
+        // Load the sprite image
+        this.sprite = new Image(getClass().getResource("/images/mario.png").toExternalForm());
     }
     public void handleKeyPressed(KeyEvent event) {
         switch (event.getCode()) {
@@ -82,8 +82,7 @@ public class Player {
         // If Mario is outside, don’t update his position (he stays in the old position)
     }
     public void render(GraphicsContext gc) {
-        gc.setFill(Color.BLUE);
-        gc.fillRect(x, y, 20, 20);
+        gc.drawImage(sprite, x, y, 30, 30); // Draw sprite instead of rectangle
     }
 
     public boolean checkCollision(Enemy enemy) {

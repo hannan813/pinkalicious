@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>MainMenu.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+.s4 { color: #6aab73;}
+.s5 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+MainMenu.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">edu</span><span class="s2">.</span><span class="s1">sdccd</span><span class="s2">.</span><span class="s1">cisc190</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">Scene</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">control</span><span class="s2">.</span><span class="s1">Button</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">layout</span><span class="s2">.</span><span class="s1">Pane</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">scene</span><span class="s2">.</span><span class="s1">text</span><span class="s2">.</span><span class="s1">Text</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">stage</span><span class="s2">.</span><span class="s1">Stage</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">MainMenu </span><span class="s2">{</span>
+
+    <span class="s0">public </span><span class="s1">Scene createMainMenuScene</span><span class="s2">(</span><span class="s1">Stage stage</span><span class="s2">) {</span>
+        <span class="s1">Pane mainMenuPane </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Pane</span><span class="s2">();</span>
+        <span class="s1">Text title </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Text</span><span class="s2">(</span><span class="s3">300</span><span class="s2">, </span><span class="s3">100</span><span class="s2">, </span><span class="s4">&quot;End of Year Project&quot;</span><span class="s2">);</span>
+        <span class="s1">title</span><span class="s2">.</span><span class="s1">setStyle</span><span class="s2">(</span><span class="s4">&quot;-fx-font-size: 30px;&quot;</span><span class="s2">);</span>
+
+        <span class="s1">Button startButton </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Button</span><span class="s2">(</span><span class="s4">&quot;Start Game&quot;</span><span class="s2">);</span>
+        <span class="s1">startButton</span><span class="s2">.</span><span class="s1">setLayoutX</span><span class="s2">(</span><span class="s3">350</span><span class="s2">);</span>
+        <span class="s1">startButton</span><span class="s2">.</span><span class="s1">setLayoutY</span><span class="s2">(</span><span class="s3">200</span><span class="s2">);</span>
+        <span class="s1">startButton</span><span class="s2">.</span><span class="s1">setOnAction</span><span class="s2">(</span><span class="s1">e -&gt; startGame</span><span class="s2">(</span><span class="s1">stage</span><span class="s2">));</span>
+
+        <span class="s1">Button leaderboardButton </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Button</span><span class="s2">(</span><span class="s4">&quot;Leaderboard&quot;</span><span class="s2">);</span>
+        <span class="s1">leaderboardButton</span><span class="s2">.</span><span class="s1">setLayoutX</span><span class="s2">(</span><span class="s3">350</span><span class="s2">);</span>
+        <span class="s1">leaderboardButton</span><span class="s2">.</span><span class="s1">setLayoutY</span><span class="s2">(</span><span class="s3">250</span><span class="s2">);</span>
+        <span class="s1">leaderboardButton</span><span class="s2">.</span><span class="s1">setOnAction</span><span class="s2">(</span><span class="s1">e -&gt; showLeaderboard</span><span class="s2">(</span><span class="s1">stage</span><span class="s2">));</span>
+
+        <span class="s1">mainMenuPane</span><span class="s2">.</span><span class="s1">getChildren</span><span class="s2">().</span><span class="s1">addAll</span><span class="s2">(</span><span class="s1">title</span><span class="s2">, </span><span class="s1">startButton</span><span class="s2">, </span><span class="s1">leaderboardButton</span><span class="s2">);</span>
+
+        <span class="s0">return new </span><span class="s1">Scene</span><span class="s2">(</span><span class="s1">mainMenuPane</span><span class="s2">, </span><span class="s3">800</span><span class="s2">, </span><span class="s3">500</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">startGame</span><span class="s2">(</span><span class="s1">Stage stage</span><span class="s2">) {</span>
+        <span class="s1">Game game </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Game</span><span class="s2">();</span>
+        <span class="s5">// Pass the stage to the Game class's createGameScene method</span>
+        <span class="s1">Scene gameScene </span><span class="s2">= </span><span class="s1">game</span><span class="s2">.</span><span class="s1">createGameScene</span><span class="s2">(</span><span class="s1">stage</span><span class="s2">);</span>
+        <span class="s1">stage</span><span class="s2">.</span><span class="s1">setScene</span><span class="s2">(</span><span class="s1">gameScene</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private void </span><span class="s1">showLeaderboard</span><span class="s2">(</span><span class="s1">Stage stage</span><span class="s2">) {</span>
+        <span class="s1">Leaderboard leaderboard </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Leaderboard</span><span class="s2">();</span>
+        <span class="s1">Scene leaderboardScene </span><span class="s2">= </span><span class="s1">leaderboard</span><span class="s2">.</span><span class="s1">createLeaderboardScene</span><span class="s2">();</span>
+        <span class="s1">stage</span><span class="s2">.</span><span class="s1">setScene</span><span class="s2">(</span><span class="s1">leaderboardScene</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+</pre>
+</body>
+</html>
