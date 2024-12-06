@@ -6,7 +6,7 @@ import javafx.scene.input.KeyEvent;
 
 import java.awt.*;
 
-public class Player {
+public class Player extends GameObject {
     private final int speed;
     private int x, y;
     private boolean movingLeft = false;

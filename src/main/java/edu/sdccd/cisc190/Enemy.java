@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 
-public class Enemy {
+public class Enemy extends GameObject {
     private int x, y;
     private boolean movingRight;
     //    private static final int SPEED = 10;
