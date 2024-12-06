@@ -12,7 +12,6 @@ public class Leaderboard {
     public void addScore(String score) {
         scores.add(score);
     }
-
     public void display() {
         // Display the leaderboard (could be a simple console print or GUI)
     }
