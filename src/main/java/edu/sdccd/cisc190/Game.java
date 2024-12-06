@@ -117,7 +117,7 @@ public class Game {
             SPEED++;
             level++;
             player.respawn();
-return false;
+            return false;
         }
 
         return gameOutline.contains(x, y) &&

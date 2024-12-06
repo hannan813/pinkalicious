@@ -17,7 +17,6 @@ public class GameObject {
     public GameObject() { // Default constructor
     }
 
-
     // Abstract update method to be overridden in subclasses
     public void update() {
         // Default implementation or empty if subclasses will provide their own
