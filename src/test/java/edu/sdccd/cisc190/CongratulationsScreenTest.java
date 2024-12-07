@@ -1,22 +1,18 @@
 package edu.sdccd.cisc190;
 
-import edu.sdccd.cisc190.CongratulationsScreen;
 import javafx.application.Application;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
-import javafx.stage.Stage;
 
 public class CongratulationsScreenTest extends Application {
 
     private CongratulationsScreen congratsScreen;
 
     @Override
-    public void start(Stage stage) {
-        // Initialize the CongratulationsScreen
+    public void start(javafx.stage.Stage stage) {
         congratsScreen = new CongratulationsScreen();
         stage.setScene(new javafx.scene.Scene(congratsScreen.createCongratsScreen(), 400, 400));
         stage.show();

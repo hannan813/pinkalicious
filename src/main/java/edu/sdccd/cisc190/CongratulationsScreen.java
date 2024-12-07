@@ -8,18 +8,29 @@ import javafx.scene.text.TextAlignment;
 
 public class CongratulationsScreen {
 
-    public Pane createCongratsScreen() {
+    public Pane createCongratsScreen(Leaderboard leaderboard) {
         Pane congratsPane = new Pane();
-        congratsPane.setStyle("-fx-background-color: lightblue;"); // Add a background color
+        congratsPane.setStyle("-fx-background-color: lightblue;");
 
         Text congratsText = new Text("Congratulations! You finished the game!");
         congratsText.setFont(Font.font("Arial", 30));
-        congratsText.setFill(Color.DARKBLUE); // Set text color
+        congratsText.setFill(Color.DARKBLUE);
         congratsText.setTextAlignment(TextAlignment.CENTER);
-
-        // Center the text in the Pane
-        congratsText.setX(200); // Adjust based on your window size
+        congratsText.setX(200);
         congratsText.setY(200);
+
+        // Add leaderboard scores below the congrats text
+        int yPosition = 250;
+        for (String score : leaderboard.getScores()) {
+            Text scoreText = new Text(score);
+            scoreText.setFont(Font.font("Arial", 20));
+            scoreText.setFill(Color.BLACK);
+            scoreText.setTextAlignment(TextAlignment.CENTER);
+            scoreText.setX(200);
+            scoreText.setY(yPosition);
+            congratsPane.getChildren().add(scoreText);
+            yPosition += 30;
+        }
 
         congratsPane.getChildren().add(congratsText);
         return congratsPane;

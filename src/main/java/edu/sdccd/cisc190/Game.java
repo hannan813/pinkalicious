@@ -7,7 +7,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +26,7 @@ public class Game {
     private int SPEED = 2;
     private final Level level; // Integrate Level class
     private Stage stage;
+    private Leaderboard leaderboard;
     private CongratulationsScreen congratulationsScreen;
 
     public Game(Canvas canvas, Scene scene, Stage stage) {
@@ -36,6 +36,7 @@ public class Game {
         this.level = new Level(); // Initialize the Level class
         this.stage = stage; // Assign the stage
         this.congratulationsScreen = new CongratulationsScreen(); // Initialize the congratulations screen
+        this.leaderboard = new Leaderboard("leaderboard.txt"); // File to store scores
         initializeEnemies();
         initializeGameOutline();
 
@@ -61,7 +62,11 @@ public class Game {
             }
 
             private void showCongratulationsScreen() {
-                Pane congratsPane = congratulationsScreen.createCongratsScreen();
+                // Transition to the blank level for the congratulations screen
+                level.loadCongratulationsLevel(canvas.getGraphicsContext2D());
+
+                // Show the congratulations screen and leaderboard
+                Pane congratsPane = congratulationsScreen.createCongratsScreen(leaderboard);
                 Scene congratsScene = new Scene(congratsPane, 800, 600); // Adjust dimensions if needed
                 stage.setScene(congratsScene);
                 stage.show(); // Show the updated stage

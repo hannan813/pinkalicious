@@ -1,9 +1,12 @@
 package edu.sdccd.cisc190;
+
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 
 public class Player {
+    private static int playerCount = 0; // Static counter for automatic naming
+    private final String name;         // Each player gets a unique name
     private final int speed;
     private int x, y;
     private boolean movingLeft = false;
@@ -13,34 +16,41 @@ public class Player {
     private final Game game;
     private final Image sprite; // Use JavaFX Image for sprite
 
-
     public Player(int startX, int startY, int l, Game game) {
         this.x = startX;
         this.y = startY;
         this.speed = 5;
         this.game = game;
 
+        // Automatically assign a name like Player1, Player2, etc.
+        playerCount++;
+        this.name = "Player" + playerCount;
 
         // Load the sprite image
         this.sprite = new Image(getClass().getResource("/images/mario.png").toExternalForm());
     }
+
+    // Getter for name (if needed in other parts of your game)
+    public String getName() {
+        return name;
+    }
+
     public void handleKeyPressed(KeyEvent event) {
         switch (event.getCode()) {
-            case LEFT:  // Left arrow key
+            case LEFT:
                 movingLeft = true;
                 break;
-            case RIGHT:  // Right arrow key
+            case RIGHT:
                 movingRight = true;
                 break;
-            case UP:  // Up arrow key
+            case UP:
                 movingUp = true;
                 break;
-            case DOWN:  // Down arrow key
+            case DOWN:
                 movingDown = true;
                 break;
         }
     }
-
 
     public void handleKeyReleased(KeyEvent event) {
         switch (event.getCode()) {
@@ -59,47 +69,38 @@ public class Player {
         }
     }
 
-
     public void update() {
-        int speed = 5;  // Mario’s movement speed
+        int speed = 5;
 
-
-        // Store Mario's new position
         int newX = x;
         int newY = y;
 
-
-        // Check for Mario's movement (left, right, up, down)
         if (movingLeft)
-            newX -= speed;  // Try to move left
-        if (movingRight) newX += speed;  // Try to move right
+            newX -= speed;
+        if (movingRight)
+            newX += speed;
         if (movingUp)
-            newY -= speed;  // Try to move up
-        if (movingDown) newY += speed;  // Try to move down
+            newY -= speed;
+        if (movingDown)
+            newY += speed;
 
-
-        // Check if the new position is inside the polygon
-        if (game.isInsideGameOutline(newX, newY,0,0)) {
-            x = newX;  // If inside, update Mario’s position
+        if (game.isInsideGameOutline(newX, newY, 0, 0)) {
+            x = newX;
             y = newY;
         }
-        // If Mario is outside, don’t update his position (he stays in the old position)
-    }
-    public void render(GraphicsContext gc) {
-        gc.drawImage(sprite, x, y, 30, 30); // Draw sprite instead of rectangle
     }
 
+    public void render(GraphicsContext gc) {
+        gc.drawImage(sprite, x, y, 30, 30);
+    }
 
     public boolean checkCollision(Enemy enemy) {
         return x < enemy.getX() + 20 && x + 20 > enemy.getX()
                 && y < enemy.getY() + 20 && y + 20 > enemy.getY();
     }
 
-
     public void respawn() {
         x = 100;
         y = 350;
     }
-
-
 }
