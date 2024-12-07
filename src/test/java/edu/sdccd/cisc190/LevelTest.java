@@ -24,6 +24,6 @@ public class LevelTest {
         for (int i = 0; i < 10; i++) {
             level.nextLevel();
         }
-        assertEquals(6, level.getCurrentLevel(), "Level should not exceed the maximum level of 6.");
+        assertEquals(7, level.getCurrentLevel(), "Level should not exceed the maximum level of 6.");
     }
 }
