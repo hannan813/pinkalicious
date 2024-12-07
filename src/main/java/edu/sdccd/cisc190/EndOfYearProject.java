@@ -39,11 +39,11 @@ public class EndOfYearProject extends Application {
         // Create a root group for the game scene
         Group root = new Group(canvas);
 
-        // Create the game scene
+        // Creates the game scene
         Scene gameScene = new Scene(root);
 
         // Initialize the game (You may need to pass additional parameters depending on your Game class)
-        game = new Game(canvas, gameScene);
+        game = new Game(canvas, gameScene, primaryStage);
 
         // Set the scene to the game scene and update the title
         primaryStage.setScene(gameScene);

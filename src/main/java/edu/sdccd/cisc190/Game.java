@@ -1,25 +1,22 @@
 package edu.sdccd.cisc190;
-
 import javafx.animation.AnimationTimer;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class Game {
     private final Player player;
     private Enemy[] enemies;
-    private int level = 1, fails = 0;
-    private int currentLevel = 1;  // Track current level
-    private int score = 0;  // Track score
-    private List<Coin> coins = new ArrayList<>();  // List to hold coins
+    private int fails = 0;
+    private int score = 0;
+    private List<Coin> coins = new ArrayList<>();
     private boolean repeat = true;
     private final int m = 72, n = 115, L = 40;
     private final Canvas canvas;
@@ -27,38 +24,18 @@ public class Game {
     private Polygon gameOutline;
     private static final int GRID_ROWS = 7;
     private static final int GRID_COLS = 10;
-    private  int SPEED = 2;
+    private int SPEED = 2;
+    private final Level level; // Integrate Level class
+    private Stage stage;
+    private CongratulationsScreen congratulationsScreen;
 
-    public void startLevel(int level) {
-        this.currentLevel = level;
-
-        if (level >= 2) {
-            // Clear existing coins before adding new ones for the level
-            coins.clear();
-            // Add new coins for level 2 and up
-            coins.add(new Coin(100, 200));
-            coins.add(new Coin(200, 300));
-            coins.add(new Coin(300, 400));
-        }
-    }
-    // Method to increment the score when a coin is collected
-    public void incrementScore() {
-        score++;
-    }
-    // Method to get the current score
-    public int getScore() {
-        return score;
-    }
-
-    // Method to get the list of coins
-    public List<Coin> getCoins() {
-        return coins;
-    }
-
-    public Game(Canvas canvas, Scene scene) {
+    public Game(Canvas canvas, Scene scene, Stage stage) {
         this.canvas = canvas;
         this.enemies = new Enemy[5];
         this.player = new Player(100, 350, L, this);
+        this.level = new Level(); // Initialize the Level class
+        this.stage = stage; // Assign the stage
+        this.congratulationsScreen = new CongratulationsScreen(); // Initialize the congratulations screen
         initializeEnemies();
         initializeGameOutline();
 
@@ -71,10 +48,23 @@ public class Game {
             @Override
             public void handle(long now) {
                 if (now - lastUpdate >= NANO_FPS) {
-                    update();
-                    render();
+                    if (isGameOver()) {
+                        gameLoop.stop(); // Stop the game loop if game is over
+                        System.out.println("Congratulations! You've completed the game!");
+                        showCongratulationsScreen(); // Display the congratulations screen
+                    } else {
+                        update();
+                        render();
+                    }
                     lastUpdate = now;
                 }
+            }
+
+            private void showCongratulationsScreen() {
+                Pane congratsPane = congratulationsScreen.createCongratsScreen();
+                Scene congratsScene = new Scene(congratsPane, 800, 600); // Adjust dimensions if needed
+                stage.setScene(congratsScene);
+                stage.show(); // Show the updated stage
             }
         };
         gameLoop.start();
@@ -86,7 +76,7 @@ public class Game {
 
     private void initializeEnemies() {
         for (int i = 0; i < enemies.length; i++) {
-            enemies[i] = new Enemy(i,this);
+            enemies[i] = new Enemy(i, this);
         }
     }
 
@@ -112,11 +102,12 @@ public class Game {
     }
 
     public boolean isInsideGameOutline(int x, int y, int width, int height) {
-        if (x >= 600)
-        {
+        if (x >= 600) {
             SPEED++;
-            level++;
-            player.respawn();
+            level.nextLevel(); // Advance to the next level
+            if (!isGameOver()) {
+                player.respawn();
+            }
             return false;
         }
 
@@ -155,7 +146,7 @@ public class Game {
         gc.fillRect(0, 0, canvas.getWidth(), 50);
         gc.setFill(Color.WHITE);
         gc.setFont(javafx.scene.text.Font.font("TIMES NEW ROMAN", 50));
-        gc.fillText("Level: " + level, 10, 40);
+        gc.fillText("Level: " + level.getCurrentLevel(), 10, 40); // Show current level
         gc.fillText("Fails: " + fails, canvas.getWidth() - 200, 40);
 
         // Static elements
@@ -166,7 +157,6 @@ public class Game {
         for (Enemy enemy : enemies) {
             enemy.render(gc);
         }
-
     }
 
     private void renderStaticElements(GraphicsContext gc) {
@@ -195,5 +185,9 @@ public class Game {
                 (j == GRID_COLS - 1 && i >= 1) ||
                 (i == 0 && j < GRID_COLS - 2) ||
                 (i == GRID_ROWS - 1 && j >= 2);
+    }
+
+    public boolean isGameOver() {
+        return level.getCurrentLevel() > 6; // Game ends after level 6
     }
 }

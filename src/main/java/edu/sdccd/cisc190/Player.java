@@ -1,12 +1,9 @@
 package edu.sdccd.cisc190;
-
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 
-import java.awt.*;
-
-public class Player extends GameObject {
+public class Player {
     private final int speed;
     private int x, y;
     private boolean movingLeft = false;
@@ -16,11 +13,13 @@ public class Player extends GameObject {
     private final Game game;
     private final Image sprite; // Use JavaFX Image for sprite
 
+
     public Player(int startX, int startY, int l, Game game) {
         this.x = startX;
         this.y = startY;
         this.speed = 5;
         this.game = game;
+
 
         // Load the sprite image
         this.sprite = new Image(getClass().getResource("/images/mario.png").toExternalForm());
@@ -42,6 +41,7 @@ public class Player extends GameObject {
         }
     }
 
+
     public void handleKeyReleased(KeyEvent event) {
         switch (event.getCode()) {
             case LEFT:
@@ -59,12 +59,15 @@ public class Player extends GameObject {
         }
     }
 
+
     public void update() {
         int speed = 5;  // Mario’s movement speed
+
 
         // Store Mario's new position
         int newX = x;
         int newY = y;
+
 
         // Check for Mario's movement (left, right, up, down)
         if (movingLeft)
@@ -73,6 +76,7 @@ public class Player extends GameObject {
         if (movingUp)
             newY -= speed;  // Try to move up
         if (movingDown) newY += speed;  // Try to move down
+
 
         // Check if the new position is inside the polygon
         if (game.isInsideGameOutline(newX, newY,0,0)) {
@@ -85,15 +89,17 @@ public class Player extends GameObject {
         gc.drawImage(sprite, x, y, 30, 30); // Draw sprite instead of rectangle
     }
 
+
     public boolean checkCollision(Enemy enemy) {
         return x < enemy.getX() + 20 && x + 20 > enemy.getX()
                 && y < enemy.getY() + 20 && y + 20 > enemy.getY();
     }
+
 
     public void respawn() {
         x = 100;
         y = 350;
     }
 
-}
 
+}
