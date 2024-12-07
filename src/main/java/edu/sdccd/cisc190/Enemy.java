@@ -10,7 +10,7 @@ public class Enemy extends GameObject {
     private final Game game;      // Reference to the Game object
 
     // Constructor
-    public Enemy(int index, Game game) {
+    public Enemy(int index, int i, Game game) {
         super((index % 2 == 0) ? 300 : 500, 160 + index * 40); // Set initial position
         this.movingRight = index % 2 == 0;  // Alternate movement direction based on index
         this.game = game;  // Store reference to the Game object

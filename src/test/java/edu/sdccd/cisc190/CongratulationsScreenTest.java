@@ -1,47 +1,35 @@
 package edu.sdccd.cisc190;
 
-import javafx.application.Application;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CongratulationsScreenTest extends Application {
-
-    private CongratulationsScreen congratsScreen;
-
-    @Override
-    public void start(javafx.stage.Stage stage) {
-        congratsScreen = new CongratulationsScreen();
-        stage.setScene(new javafx.scene.Scene(congratsScreen.createCongratsScreen(), 400, 400));
-        stage.show();
-    }
+public class CongratulationsScreenTest {
 
     @Test
-    public void testCongratsScreenText() {
-        Pane congratsPane = congratsScreen.createCongratsScreen();
+    public void testCreateCongratsScreen() {
+        // Create an instance of the CongratulationsScreen class
+        CongratulationsScreen congratsScreen = new CongratulationsScreen();
 
-        // Find the Text object in the Pane and test its content
-        Text congratsText = (Text) congratsPane.getChildren().get(0);
-        assertEquals("Congratulations! You finished the game!", congratsText.getText());
-    }
+        // Call the createCongratsScreen method
+        Pane pane = congratsScreen.createCongratsScreen();
 
-    @Test
-    public void testCongratsScreenBackgroundColor() {
-        Pane congratsPane = congratsScreen.createCongratsScreen();
+        // Check that the returned Pane is not null
+        assertNotNull(pane, "The Pane should not be null.");
 
-        // Check the background color of the Pane
-        assertEquals("-fx-background-color: lightblue;", congratsPane.getStyle());
-    }
+        // Check that the Pane contains children
+        assertFalse(pane.getChildren().isEmpty(), "The Pane should contain children.");
 
-    @Test
-    public void testCongratsTextPositioning() {
-        Pane congratsPane = congratsScreen.createCongratsScreen();
-        Text congratsText = (Text) congratsPane.getChildren().get(0);
+        // Check the first child is a Text node
+        assertTrue(pane.getChildren().get(0) instanceof Text, "The first child should be a Text node.");
 
-        // Verify the text position
-        assertEquals(200, congratsText.getX(), 0.1);
-        assertEquals(200, congratsText.getY(), 0.1);
+        // Check the properties of the Text node
+        Text text = (Text) pane.getChildren().get(0);
+        assertEquals("Congratulations! You finished the game!", text.getText(), "The Text content is incorrect.");
+        assertEquals("Arial", text.getFont().getName(), "The font name is incorrect.");
+        assertEquals(30, text.getFont().getSize(), "The font size is incorrect.");
+        assertEquals("0x00008bff", text.getFill().toString(), "The text color is incorrect."); // Color.DARKBLUE
     }
 }

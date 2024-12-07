@@ -37,16 +37,16 @@ public class Player {
 
     public void handleKeyPressed(KeyEvent event) {
         switch (event.getCode()) {
-            case LEFT:
+            case LEFT:  // Left arrow key
                 movingLeft = true;
                 break;
-            case RIGHT:
+            case RIGHT:  // Right arrow key
                 movingRight = true;
                 break;
-            case UP:
+            case UP:  // Up arrow key
                 movingUp = true;
                 break;
-            case DOWN:
+            case DOWN:  // Down arrow key
                 movingDown = true;
                 break;
         }
@@ -70,24 +70,29 @@ public class Player {
     }
 
     public void update() {
-        int speed = 5;
+        int speed = 5;  // Mario’s movement speed
 
+
+        // Store Mario's new position
         int newX = x;
         int newY = y;
 
-        if (movingLeft)
-            newX -= speed;
-        if (movingRight)
-            newX += speed;
-        if (movingUp)
-            newY -= speed;
-        if (movingDown)
-            newY += speed;
 
-        if (game.isInsideGameOutline(newX, newY, 0, 0)) {
-            x = newX;
+        // Check for Mario's movement (left, right, up, down)
+        if (movingLeft)
+            newX -= speed;  // Try to move left
+        if (movingRight) newX += speed;  // Try to move right
+        if (movingUp)
+            newY -= speed;  // Try to move up
+        if (movingDown) newY += speed;  // Try to move down
+
+
+        // Check if the new position is inside the polygon
+        if (game.isInsideGameOutline(newX, newY,0,0)) {
+            x = newX;  // If inside, update Mario’s position
             y = newY;
         }
+        // If Mario is outside, don’t update his position (he stays in the old position)
     }
 
     public void render(GraphicsContext gc) {
@@ -102,5 +107,14 @@ public class Player {
     public void respawn() {
         x = 100;
         y = 350;
+    }
+
+
+    public double getX() {
+        return 0;
+    }
+
+    public int getY() {
+        return 0;
     }
 }

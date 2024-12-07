@@ -75,13 +75,14 @@ public class Game {
         gameLoop.start();
     }
 
+
     public int getSpeed() {
         return SPEED;
     }
 
     private void initializeEnemies() {
         for (int i = 0; i < enemies.length; i++) {
-            enemies[i] = new Enemy(i, this);
+            enemies[i] = new Enemy(i, 350, this);
         }
     }
 
