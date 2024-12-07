@@ -1,57 +1,51 @@
 package edu.sdccd.cisc190;
+
 import java.io.*;
 import java.util.*;
 
 public class Leaderboard {
-    private final String leaderboardFile;
-    private List<PlayerScore> scores;
+    private final List<String> scores;
+    private final String filename;
 
-    public Leaderboard(String leaderboardFile) {
-        this.leaderboardFile = leaderboardFile;
+    public Leaderboard(String filename) {
+        this.filename = filename;
         this.scores = new ArrayList<>();
         loadScores();
     }
 
-    // Class to store player name, completion time, and fail count
-    public static class PlayerScore {
-        String name;
-        long time; // Completion time in milliseconds
-        int fails; // Number of fails
-
-        public PlayerScore(String name, long time, int fails) {
-            this.name = name;
-            this.time = time;
-            this.fails = fails;
-        }
-    }
-
-    // Add player to leaderboard
-    public void addPlayer(String name, long time, int fails) {
-        scores.add(new PlayerScore(name, time, fails));
-        Collections.sort(scores, Comparator.comparingLong(o -> o.time)); // Sort by time (fastest first)
-        saveScores();
-    }
-
-    // Load scores from a file
+    // Load scores from the file
     private void loadScores() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(leaderboardFile))) {
-            scores = (List<PlayerScore>) ois.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Save scores to a file
-    private void saveScores() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(leaderboardFile))) {
-            oos.writeObject(scores);
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                scores.add(line);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    // Get the top 10 players (or all players if fewer than 10)
-    public List<PlayerScore> getTopScores() {
-        return scores.size() > 10 ? scores.subList(0, 10) : scores;
+    // Save scores to the file
+    private void saveScores() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (String score : scores) {
+                writer.write(score);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Add a new score to the leaderboard
+    public void addScore(String name, int time, int fails) {
+        String score = String.format("%s - Time: %d seconds, Fails: %d", name, time, fails);
+        scores.add(score);
+        saveScores();
+    }
+
+    // Get the leaderboard scores
+    public List<String> getScores() {
+        return scores;
     }
 }

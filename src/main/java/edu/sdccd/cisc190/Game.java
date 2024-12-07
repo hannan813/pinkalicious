@@ -9,7 +9,8 @@ import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Timer;
+import java.util.TimerTask;
 public class Game {
     private final Player player;
     private Enemy[] enemies;
@@ -39,6 +40,7 @@ public class Game {
         this.leaderboard = new Leaderboard("leaderboard.txt"); // File to store scores
         initializeEnemies();
         initializeGameOutline();
+        long startTime = System.currentTimeMillis();  // Start the timer
 
         setupInput(scene);
         gameLoop = new AnimationTimer() {
@@ -51,6 +53,9 @@ public class Game {
                 if (now - lastUpdate >= NANO_FPS) {
                     if (isGameOver()) {
                         gameLoop.stop(); // Stop the game loop if game is over
+                        long endTime = System.currentTimeMillis();
+                        long timeTaken = (endTime - startTime) / 1000; // Time in seconds
+                        leaderboard.addScore("Player", (int) timeTaken, fails);
                         System.out.println("Congratulations! You've completed the game!");
                         showCongratulationsScreen(); // Display the congratulations screen
                     } else {
