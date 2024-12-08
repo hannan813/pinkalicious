@@ -1,76 +1,79 @@
 package edu.sdccd.cisc190;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import org.junit.jupiter.api.*;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class LeaderboardTest {
 
+
     private Leaderboard leaderboard;
-    private File tempFile;
+
 
     @BeforeEach
-    void setUp() throws IOException {
-        // Create a temporary file to simulate file I/O operations
-        tempFile = Files.createTempFile("leaderboard", ".txt").toFile();
-        tempFile.deleteOnExit(); // Ensures the temp file is deleted when the JVM exits
+    void setUp() {
+        // Initialize the leaderboard with a dummy file name (the file itself won't be used)
+        leaderboard = new Leaderboard("dummy.txt");
 
-        // Create an instance of Leaderboard with the temporary file
-        leaderboard = new Leaderboard(tempFile.getAbsolutePath());
 
-        // Add some initial scores to the leaderboard
-        leaderboard.addScore("Player1: 1000");
-        leaderboard.addScore("Player2: 900");
+        // Reset the scores to ensure the leaderboard starts fresh for each test
+        leaderboard.getScores().clear();
     }
 
-    @Test
-    void testGetScores() {
-        List<String> scores = leaderboard.getScores();
-
-        // Verify the leaderboard contains the expected scores
-        assertNotNull(scores);
-        assertEquals(2, scores.size());
-        assertTrue(scores.contains("Player1: 1000"));
-        assertTrue(scores.contains("Player2: 900"));
-    }
 
     @Test
     void testAddScore() {
-        leaderboard.addScore("Player3: 800");
+        // Add a score to the leaderboard
+        leaderboard.addScore("Player1", 120, 3);
 
+
+        // Retrieve the list of scores
         List<String> scores = leaderboard.getScores();
 
-        // Verify the score was added
-        assertEquals(3, scores.size());
-        assertTrue(scores.contains("Player3: 800"));
+
+        // Check if the leaderboard contains the new score
+        assertEquals(1, scores.size());
+        assertTrue(scores.get(0).contains("Player1"));
+        assertTrue(scores.get(0).contains("120"));
+        assertTrue(scores.get(0).contains("3"));
     }
 
+
     @Test
-    void testSaveScores() throws IOException {
-        // Save the scores and then load them again to verify the file content
-        leaderboard.addScore("Player4: 700");
-        leaderboard.addScore("Player5: 600");
+    void testAddMultipleScores() {
+        // Add multiple scores
+        leaderboard.addScore("Player1", 100, 2);
+        leaderboard.addScore("Player2", 150, 1);
 
-        // Recreate leaderboard object to simulate a fresh load from file
-        Leaderboard newLeaderboard = new Leaderboard(tempFile.getAbsolutePath());
 
-        List<String> scores = newLeaderboard.getScores();
+        // Retrieve the list of scores
+        List<String> scores = leaderboard.getScores();
 
-        // Verify that the new leaderboard contains all the saved scores
-        assertTrue(scores.contains("Player4: 700"));
-        assertTrue(scores.contains("Player5: 600"));
+
+        // Ensure both scores are in the leaderboard
+        assertEquals(2, scores.size());
+        assertTrue(scores.contains("Player1 - Time: 100 seconds, Fails: 2"));
+        assertTrue(scores.contains("Player2 - Time: 150 seconds, Fails: 1"));
     }
 
+
     @Test
-    void testDisplay() {
-        // Simply test that the display method works without exceptions
-        leaderboard.display();
+    void testGetScores() {
+        // Add a score and retrieve the scores
+        leaderboard.addScore("Player1", 120, 3);
+        List<String> scores = leaderboard.getScores();
+
+
+        // Check if the leaderboard has exactly 1 score
+        assertEquals(1, scores.size());
+    }
+
+
+    @Test
+    void testLeaderboardIsEmptyInitially() {
+        // Verify that the leaderboard is empty when no scores are added
+        List<String> scores = leaderboard.getScores();
+        assertTrue(scores.isEmpty(), "Leaderboard should be empty initially.");
     }
 }

@@ -48,4 +48,7 @@ public class Leaderboard {
     public List<String> getScores() {
         return scores;
     }
+
+    public void addScore(String s) {
+    }
 }

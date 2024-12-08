@@ -1,9 +1,12 @@
 package edu.sdccd.cisc190;
 
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+
 public class LevelTest {
+
 
     @Test
     public void testInitialLevel() {
@@ -11,12 +14,14 @@ public class LevelTest {
         assertEquals(1, level.getCurrentLevel(), "Initial level should be 1.");
     }
 
+
     @Test
     public void testNextLevel() {
         Level level = new Level();
         level.nextLevel();
         assertEquals(2, level.getCurrentLevel(), "After one call to nextLevel, the level should be 2.");
     }
+
 
     @Test
     public void testMaxLevel() {
