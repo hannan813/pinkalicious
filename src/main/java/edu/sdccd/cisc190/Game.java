@@ -15,7 +15,6 @@ public class Game {
     private Enemy[] enemies;
     private int fails = 0;
     private int score = 0;
-    private List<Coin> coins = new ArrayList<>();
     private boolean repeat = true;
     private final int m = 72, n = 115, L = 40;
     private final Canvas canvas;
