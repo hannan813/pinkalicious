@@ -3,6 +3,11 @@ package edu.sdccd.cisc190;
 import java.io.*;
 import java.util.*;
 
+// TODO: Continuing on from the TODO that was in your CongratulationsScreen Class, you should implement the separate popup here in this class
+    // Or you could make a different class for it
+// TODO: Ensure you add Javadocs for each public method in this class.
+// Examples are seen in Classes: EndOfYearProject, Enemy, & Game
+
 public class Leaderboard {
     private final List<String> scores;
     private final String filename;

@@ -5,6 +5,9 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+// TODO: Ensure you add Javadocs for each public method in this class.
+// Examples are seen in Classes: EndOfYearProject, Enemy, & Game
+
 public class MainMenu {
     private Stage stage;
     private Runnable startGameAction;
