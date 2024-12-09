@@ -4,6 +4,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 
+// TODO: Ensure you add Javadocs for each public method in this class.
+// Examples are seen in Classes: EndOfYearProject, Enemy, & Game
+
 public class Player {
     private static int playerCount = 0; // Static counter for automatic naming
     private final String name;         // Each player gets a unique name

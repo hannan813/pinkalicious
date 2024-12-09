@@ -3,6 +3,8 @@ package edu.sdccd.cisc190;
 
 import javafx.scene.canvas.GraphicsContext;
 
+// TODO: Ensure you add Javadocs for each public method in this class.
+    // Examples are seen in Classes: EndOfYearProject, Enemy, & Game
 
 public class GameObject {
     protected int x, y;  // Position variables

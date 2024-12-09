@@ -29,6 +29,9 @@ public class Game {
     private Leaderboard leaderboard;
     private CongratulationsScreen congratulationsScreen;
 
+    /**
+     * Manages the player, enemies, and game logic.
+     */
     public Game(Canvas canvas, Scene scene, Stage stage) {
         this.canvas = canvas;
         this.enemies = new Enemy[5];
@@ -41,6 +44,9 @@ public class Game {
         initializeGameOutline();
         long startTime = System.currentTimeMillis();  // Start the timer
 
+
+        // TODO: I think that you could implement the timer throughout your entire game so that players could track how long it took them to complete the game overall
+            // You can still show the result at the end in the leaderboard, but put a timer throughout the entire game
         setupInput(scene);
         gameLoop = new AnimationTimer() {
             private long lastUpdate = 0;
@@ -65,6 +71,9 @@ public class Game {
                 }
             }
 
+            /**
+             * Shows congratulations screen and leaderboard when the game done.
+             */
             private void showCongratulationsScreen() {
                 // Transition to the blank level for the congratulations screen
                 level.loadCongratulationsLevel(canvas.getGraphicsContext2D());
@@ -79,17 +88,27 @@ public class Game {
         gameLoop.start();
     }
 
-
+    /**
+     * Returns the current speed of the game.
+     */
     public int getSpeed() {
         return SPEED;
     }
 
+    /**
+     * Initializes the enemies in game.
+     * Sets up the enemy objects with their positions and behavior.
+     */
     private void initializeEnemies() {
         for (int i = 0; i < enemies.length; i++) {
             enemies[i] = new Enemy(i, 350, this);
         }
     }
 
+    /**
+     * Game outline to show level layout and include boundaries
+     * Creates a polygon to show the game’s outline.
+     */
     private void initializeGameOutline() {
         gameOutline = new Polygon(
                 m, n,
@@ -111,6 +130,15 @@ public class Game {
         );
     }
 
+    /**
+     * Checks if an area (x, y, width, height) is within the boundary of game.
+     *
+     * @param x The x-coordinate of the area.
+     * @param y The y-coordinate of the area.
+     * @param width The width of the area.
+     * @param height The height of the area.
+     * @return true if the area is inside the game boundary; false otherwise.
+     */
     public boolean isInsideGameOutline(int x, int y, int width, int height) {
         if (x >= 600) {
             SPEED++;
@@ -127,11 +155,20 @@ public class Game {
                 gameOutline.contains(x + width, y + height);
     }
 
+    /**
+     * Sets up the key press and release event handlers for the game.
+     *
+     * @param scene The scene where the input events will be handled.
+     */
     private void setupInput(Scene scene) {
         scene.setOnKeyPressed(event -> player.handleKeyPressed(event));
         scene.setOnKeyReleased(event -> player.handleKeyReleased(event));
     }
 
+    /**
+     * Updates the game state, including the player's and enemies' positions, and checks for collisions.
+     * If the player collides with an enemy, the player is respawned and the fail count is incremented.
+     */
     private void update() {
         player.update();
         for (Enemy enemy : enemies) {
@@ -143,6 +180,9 @@ public class Game {
         }
     }
 
+    /**
+     * Renders the game scene, including the player, enemies, static elements, and the scoreboard.
+     */
     private void render() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -169,6 +209,12 @@ public class Game {
         }
     }
 
+    /**
+     * Renders the static elements of the game, such as the green tubes and the grid.
+     * This method is responsible for rendering elements that do not change dynamically.
+     *
+     * @param gc The graphics context to draw the static elements.
+     */
     private void renderStaticElements(GraphicsContext gc) {
         // Green tubes
         gc.setFill(Color.LIMEGREEN);
@@ -190,6 +236,13 @@ public class Game {
         }
     }
 
+    /**
+     * Determines whether a specific grid cell should be skipped when rendering.
+     *
+     * @param i The row index of the grid.
+     * @param j The column index of the grid.
+     * @return true if the grid cell should be skipped; false otherwise.
+     */
     private boolean shouldSkipGridCell(int i, int j) {
         return (j == 0 && i <= 5) ||
                 (j == GRID_COLS - 1 && i >= 1) ||
@@ -197,6 +250,11 @@ public class Game {
                 (i == GRID_ROWS - 1 && j >= 2);
     }
 
+    /**
+     * Checks if the game is over, which occurs when the current level exceeds 6.
+     *
+     * @return true if the game is over; false otherwise.
+     */
     public boolean isGameOver() {
         return level.getCurrentLevel() > 6; // Game ends after level 6
     }

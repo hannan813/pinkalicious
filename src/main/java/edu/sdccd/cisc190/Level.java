@@ -3,6 +3,9 @@ package edu.sdccd.cisc190;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+// TODO: Ensure you add Javadocs for each public method in this class.
+// Examples are seen in Classes: EndOfYearProject, Enemy, & Game
+
 public class Level {
     private int currentLevel;
     private final int maxLevel = 7; // Define the maximum number of levels

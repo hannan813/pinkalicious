@@ -6,6 +6,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+// TODO: Some suggestions with the visual outcome, I think you could make your Congratulations a different popup
+// TODO: Have a Congratulations Popup Screen with a background, then a button to transition to the Leaderboard popup screen
+// TODO: Could also add a button to restart
+    // These are just suggestions
+
 public class CongratulationsScreen {
 
     public Pane createCongratsScreen(Leaderboard leaderboard) {

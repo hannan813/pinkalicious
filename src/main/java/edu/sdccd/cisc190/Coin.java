@@ -3,6 +3,8 @@ package edu.sdccd.cisc190;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+// TODO: Delete this class. This class seems to not be in use and is not necessary since it is not shown in the game.
+
 public class Coin {
     private int x, y;
     private boolean collected;
