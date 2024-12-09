@@ -9,6 +9,11 @@ import javafx.scene.text.TextAlignment;
 public class CongratulationsScreen {
 
     public Pane createCongratsScreen(Leaderboard leaderboard) {
+        // TODO: Add null or empty checks for leaderboard to avoid potential NullPointerExceptions
+        if (leaderboard == null || leaderboard.getScores() == null || leaderboard.getScores().isEmpty()) {
+            return new Pane(); // Return an empty pane if the leaderboard is invalid or empty
+        }
+
         Pane congratsPane = new Pane();
         congratsPane.setStyle("-fx-background-color: lightblue;");
 
