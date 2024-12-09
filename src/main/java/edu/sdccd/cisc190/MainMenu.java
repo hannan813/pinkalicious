@@ -21,9 +21,19 @@ public class MainMenu {
         // Create the Start Game button
         Button startButton = new Button("Start Game");
         startButton.setStyle("-fx-font-size: 20px; -fx-padding: 10px;");
+        
+        // Button state management: Disable the button after it is clicked
         startButton.setOnAction(e -> {
             if (startGameAction != null) {
+                startButton.setDisable(true); // Disable the button to prevent multiple triggers
                 startGameAction.run(); // Run the start game action when button is clicked
+            }
+        });
+
+        // TODO: Consider adding an event filter or listener to ensure the button isn't triggered multiple times accidentally.
+        startButton.addEventFilter(javafx.scene.input.MouseEvent.MOUSE_CLICKED, event -> {
+            if (startButton.isDisabled()) {
+                event.consume(); // Consume the event to prevent further processing if the button is disabled
             }
         });
 
@@ -41,9 +51,9 @@ public class MainMenu {
         this.startGameAction = startGameAction;
     }
 
+    // TODO: Implement additional logic or remove this unused method if not needed.
     public static Scene createMainMenu(Stage primaryStage) {
         // You can add additional logic for the main menu if needed
         return null;
     }
 }
-
